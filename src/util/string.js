@@ -1,0 +1,21 @@
+module.exports = {
+  MOBILE_EMPTY: '请填写手机号码',
+  MOBILE_FORMAT_ERROR: '格式有误',
+  PASS_EMPTY: '请设置密码',
+  PASS_LENGTH_INVALID: '长度只能在6-16个字符之间',
+  PASS_FORMAT_ERROR: '请输入字母、数字或常用符号两种及以上的组成',
+  REPEAT_PASS_EMPTY: '重复输入一次密码',
+  REPEAT_PASS_DIFF: '两次输入的密码不一致',
+  MOBILE_CODE_EMPTY: '请输入短信验证码',
+  MOBILE_CODE_ERROR: '短信验证码输入有误',
+  PIC_CODE_EMPTY: '请输入图形验证码',
+  PIC_CODE_ERROR: '图形验证码输入有误',
+  AGREEMENT_NOT: '必须先阅读并同意美柚号协议',
+  NAME_EMPTY: '请填写身份证姓名',
+  NAME_FORMAT_ERROR: '姓名输入有误',
+  NAME_LENGTH_INVALID: '姓名为2-15个汉字',
+  IDCARD_EMPTY: '请输入身份证号码',
+  IDCARD_FORMAT_ERROR: '身份证号码输入有误',
+  MEIYOU_EMPTY: '请输入手机号/邮箱',
+  MEIYOU_FORMAT_ERROR: '输入的手机号/邮箱不正确'
+};

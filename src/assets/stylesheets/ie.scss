@@ -1,0 +1,68 @@
+.ie-wrap {
+  padding-top: 100px;
+  text-align: center;
+}
+
+.ie-title {
+  color: #323232;
+  font-size: 48px;
+  line-height: 70px;
+  margin-bottom: 20px;
+}
+
+.ie-line {
+  color: #323232;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+.ie-update {
+  color: #ff5073;
+}
+
+.ie-group {
+  width: 300px;
+  margin: 50px auto 0;
+}
+
+.ie-item {
+  width: 100px;
+  float: left;
+  cursor: pointer;
+}
+
+.ie-pic {
+  height: 50px;
+  width: 50px;
+  font-size: 0;
+  margin: 0 auto;
+}
+
+.ie-pic img {
+  height: 50px;
+  width: 50px;
+}
+
+.ie-name {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #323232;
+  text-align: center;
+}
+
+.ie-icon-firefox {
+  background: url("../images/icon-firefox.png") no-repeat 0 0;
+  background-size: 50px 50px;
+}
+
+.ie-icon-chrome {
+  background: url("../images/icon-chrome.png") no-repeat 0 0;
+  background-size: 50px 50px;
+}
+
+.ie-icon-safari {
+  background: url("../images/icon-safari.png") no-repeat 0 0;
+  background-size: 50px 50px;
+}

@@ -1,0 +1,131 @@
+.container {
+  width: 1200px;
+  margin: 40px auto 0;
+  background-color: #fff;
+  min-height: 942px;
+  _height: 942px;
+  overflow: hidden;
+}
+
+.forgot-container {
+  min-height: 700px;
+  _height: 700px;
+}
+
+.menu {
+  width: 210px;
+  margin-bottom: -3000px;
+  padding-bottom: 3000px;
+  float: left;
+  border-right: 1px solid rgba(231, 231, 231, 0.7);
+  box-sizing: border-box;
+}
+
+.wrap {
+  float: left;
+  width: 990px;
+  margin-bottom: -3000px;
+  padding-bottom: 3000px;
+}
+
+.sns-login {
+  height: 40px;
+  height: 80px;
+}
+
+.sns {
+  display: inline-block;
+  width: 25%;
+  float: left;
+  text-align: center;
+  cursor: pointer;
+}
+
+.sns-img {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
+.mobile-login {
+  background: url("../images/icon_mobile.png") no-repeat center center;
+  background-size: 50px 50px;
+}
+
+.meiyou-login {
+  background: url("../images/icon_meiyou.png") no-repeat center center;
+  background-size: 30px 30px;
+}
+
+.weibo-login {
+  background: url("../images/icon_weibo.png") no-repeat center center;
+  background-size: 50px 50px;
+}
+
+.qq-login {
+  background: url("../images/icon_qq.png") no-repeat center center;
+  background-size: 50px 50px;
+}
+
+.weixin-login {
+  background: url("../images/icon_weixin.png") no-repeat center center;
+  background-size: 50px 50px;
+}
+
+.tips {
+  font-size: 12px;
+  color: #999;
+  line-height: 22px;
+  text-align: left;
+  button {
+    padding: 0;
+    font-size: 12px;
+  }
+}
+
+.register-steps {
+  width: 100%;
+  padding: 40px 0 0;
+  text-align: center;
+  .el-steps {
+    margin-left: 120px;
+  }
+}
+
+.register-form {
+  padding: 40px 0 130px 70px;
+}
+
+.center-wrap {
+  width: 650px;
+  margin: 0 auto;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.center-title {
+  font-size: 16px;
+  color: #ff74b9;
+  line-height: 24px;
+  p {
+    color: #323232;
+    span {
+      color: #ff74b9;
+    }
+  }
+}
+
+.center-form {
+  width: 510px;
+  margin-left: 50px;
+  padding-top: 40px;
+  padding-bottom: 10px;
+}
+
+.center-bottom {
+  width: 650px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 30px 0 100px;
+}

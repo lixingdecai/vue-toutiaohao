@@ -1,0 +1,237 @@
+#app .edui-default .edui-toolbar .edui-button .edui-icon, #app .edui-default .edui-toolbar .edui-menubutton .edui-icon, #app .edui-default .edui-toolbar .edui-splitbutton .edui-icon {
+  height: 30px!important;
+  width: 30px!important
+}
+
+#app .edui-default .edui-toolbar .edui-for-bold .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/b.6276eb4.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-h1 .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/h.c3ba2b6.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-underline .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/u.8dffc47.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-ul .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/ul.cc12687.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-ol .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/ol.94733a5.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-justifyleft .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/left.46bfd1c.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-justifycenter .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/center.1bd5a5d.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-justifyright .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/right.d732655.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-blockquote .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/block.8995872.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-removeformat .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/clean.44ad758.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-insertimage .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/image.34d9bfc.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-groupimages .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/image_group.7ee2c6e.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-commodity .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/commodity.d81a6ca.png) no-repeat 50% 50%
+}
+
+#app .edui-default .edui-toolbar .edui-for-upload_video .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/video.80f8d68.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-create_vote .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/vote.cb80428.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-create_rank .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/rank.1d182f0.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-horizontal .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/hr.6150e0e.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-article_link .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/article.f27c586.png)
+}
+
+#app .edui-default .edui-toolbar .edui-for-telephone .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/editor_ic_telephone.d8592c6.png) no-repeat 50% 50%
+}
+
+#app .edui-default .edui-toolbar .edui-for-audio .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/audio.7544880.png) no-repeat 50% 50%
+}
+
+#app .edui-default .edui-toolbar .edui-for-undo .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/laststep.5fe54b4.png) no-repeat 50% 50%
+}
+
+#app .edui-default .edui-toolbar .edui-for-redo .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/nextstep.701e0ad.png) no-repeat 50% 50%
+}
+
+#app .edui-default .edui-toolbar .edui-for-ic .edui-icon {
+  background: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/ic.56739e5.png) no-repeat 50% 50%
+}
+
+#app .edui-default .edui-toolbar .edui-button .edui-state-hover .edui-button-wrap {
+  background-color: #fff;
+  padding: 0;
+  border: 1px solid #E9E9E9
+}
+
+#app .edui-default .edui-toolbar .edui-button .edui-state-checked .edui-button-wrap {
+  background-color: #fff;
+  padding: 0;
+  border: 1px solid #E9E9E9;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0
+}
+
+#app .edui-default .edui-toolbar .edui-separator {
+  vertical-align: top;
+  width: 1px;
+  height: 22px;
+  margin: 5px 20px 0;
+  background: #D8D8D8
+}
+
+#app .edui-default .edui-editor-toolbarboxouter {
+  border-bottom: 1px solid #e9e9e9;
+  -webkit-filter: none;
+  filter: none;
+  background: #eee
+}
+
+#app .edui-default .edui-toolbar {
+  padding: 0
+}
+
+#app .edui-default .edui-toolbar .edui-button, #app .edui-default .edui-toolbar .edui-splitbutton, #app .edui-default .edui-toolbar .edui-menubutton, #app .edui-default .edui-toolbar .edui-combox {
+  margin: 0
+}
+
+#app .edui-default .edui-editor {
+  z-index: 1!important;
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0
+}
+
+#app .edui-default .edui-editor-toolbarbox {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0
+}
+
+#app .edui-default .edui-editor-toolbarboxouter {
+  border-bottom: 1px solid #e9e9e9;
+  background: #eee;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none
+}
+
+#app .edui-default .edui-editor-toolbarboxinner {
+  padding: 5px 10px
+}
+
+#app .edui-box.edui-for-code .edui-icon {
+  font-family: iconfont!important;
+  font-size: 14px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: 0 0;
+  line-height: 32px;
+  text-align: center;
+  color: #93959B
+}
+
+#app .edui-box.edui-for-code .edui-icon:before {
+  content: "\e6e3"
+}
+
+#edui_fixedlayer {
+  z-index: 1
+}
+
+.edui-for-icDialog .edui-dialog-titlebar, .edui-for-commodityDialog .edui-dialog-titlebar {
+  background-image: none!important;
+  background-color: #fff!important;
+  height: auto!important
+}
+
+.edui-for-icDialog .edui-dialog-draghandle, .edui-for-commodityDialog .edui-dialog-draghandle {
+  height: 50px!important;
+  text-align: center;
+  line-height: 50px
+}
+
+.edui-for-icDialog .edui-default .edui-dialog-caption, .edui-for-commodityDialog .edui-default .edui-dialog-caption {
+  font-size: 16px;
+  font-weight: 400
+}
+
+.edui-for-icDialog .edui-button-body, .edui-for-commodityDialog .edui-button-body {
+  background-image: url(//mp.toutiao.com/static/v2/resource/pgc_web/static/ueditor/images/close-btn.0f920f9.png)!important;
+  background-position: 0!important
+}
+
+.edui-for-icDialog .edui-dialog-closebutton, .edui-for-commodityDialog .edui-dialog-closebutton {
+  right: 8px!important;
+  top: 15px!important;
+  padding-left: 10px!important;
+  border-left: 1px solid #e9e9e9!important
+}
+
+.edui-for-icDialog .edui-dialog-titlebar, .edui-for-commodityDialog .edui-dialog-titlebar {
+  border-bottom: 1px solid #e9e9e9
+}
+
+body .edui-code-popup .edui-popup-content {
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  padding: 0 10px;
+  line-height: 36px;
+  text-align: center;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: 0
+}
+
+body .edui-code-popup .edui-popup-content select {
+  width: 100%;
+  height: 24px
+}

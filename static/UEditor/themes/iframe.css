@@ -1,0 +1,291 @@
+/*可以在这里添加你自己的css*/
+
+.mu-ue-image {
+  max-width: 100%;
+  display: block;
+  clear: both;
+  margin: 0 auto;
+}
+
+.mu-ue-video {
+  width: 450px;
+  height: 253px;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+}
+
+html {
+  -moz-text-size-adjust: none;
+  background: #fff none repeat scroll 0 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  color: #5d5d5d;
+  font-family: helvetica, Arial, "Hiragino Sans GB", "Microsoft YaHei", simsun;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  overflow-wrap: break-word;
+  padding: 0 10px !important;
+}
+
+.bar {
+  background: #f3f3f3 none repeat scroll 0 0;
+  height: 30px;
+  margin: 0 -9px 0 -15px;
+  padding: 5px 0 5px 15px;
+}
+
+.bar .avatar {
+  border: 0 none;
+  border-radius: 30px;
+  float: left;
+  height: 30px;
+  margin-right: 10px;
+  overflow: hidden;
+  width: 30px;
+}
+
+.bar .name {
+  color: #8f8f8f;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+header {
+  display: block;
+  padding-bottom: 9px;
+  padding-top: 15px;
+}
+
+header .title {
+  color: #000;
+  display: block;
+  font-size: 20px;
+  font-weight: bolder;
+  line-height: 24px;
+  padding-bottom: 5px;
+}
+
+header .time {
+  padding-left: 6px;
+}
+
+header .time, header .source {
+  color: #999;
+  font-size: 11px;
+  height: 11px;
+  line-height: 11px;
+}
+
+body>p {
+  line-height: 1.5;
+  margin: 1em 0;
+}
+
+p {
+  display: block;
+  overflow-wrap: break-word;
+}
+
+img {
+  clear: both;
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+a {
+  border: 0 none;
+  color: #a42020;
+  outline: 0 none;
+  text-decoration: none;
+}
+
+a:active {
+  border: 0 none;
+  outline: 0 none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 14px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+table tr td {
+  border: 1px solid #dadada;
+  padding: 2px;
+}
+
+#authors, table {
+  color: #464646;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  margin: 1em 0;
+  position: relative;
+}
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #e9e9e9;
+  border-image: none;
+  border-style: solid;
+  border-width: 1px 0 0;
+  margin: 1.5em 0;
+}
+
+blockquote {
+  background-color: #f3f4f5;
+  color: #999;
+  line-height: 1.4;
+  margin: 10px 0;
+  padding: 12px 8px;
+}
+
+.profile_v {
+  left: 60px;
+  position: absolute;
+  top: 74px;
+}
+
+.profile_v img {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  height: 15px;
+  width: 15px;
+}
+
+.profile_avatar {
+  border-radius: 8px;
+  float: left;
+  height: 40px;
+  margin-right: 5px;
+  overflow: hidden;
+  width: 40px;
+}
+
+.profile_avatar img {
+  /*background: #e7e7e7 url("http://s2.pstatp.com/r2/image/toutiao/avatar_bg_70.png") no-repeat scroll center center;*/
+  border: 0 none;
+  display: block;
+  width: 64px;
+}
+
+.profile_info {
+  color: #464646;
+  font-size: 16px;
+  font-weight: 700;
+  height: 20px;
+  line-height: 22px;
+  overflow: hidden;
+  padding: 0 0 3px;
+}
+
+.profile_desc {
+  color: #464646;
+  font-size: 12px;
+  line-height: 18px;
+  max-height: 34px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 235px;
+}
+
+.preview_float {
+  height: 60px;
+  overflow: hidden;
+}
+
+.preview_float.with_ad {
+  height: auto;
+}
+
+.tele-ic {
+  display: inline-block;
+  height: 12px;
+  line-height: 12px;
+  width: 12px;
+}
+
+[tt] {
+  border: 0 none;
+  display: block;
+  height: 1px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  padding-left: 12px;
+  position: relative;
+  color: #323232;
+  letter-spacing: 0;
+}
+
+h1::after {
+  background: #FF74B9 none repeat scroll 0 0;
+  content: "";
+  height: 18px;
+  left: 0;
+  position: absolute;
+  top: 3px;
+  width: 4px;
+}
+
+.pgc-img-caption {
+  color: #999;
+  font-size: 14px;
+  margin-top: 0px;
+  text-align: center;
+}
+
+body pre, body code {
+  background: #f0f0f0 none repeat scroll 0 0;
+  border-radius: 3px;
+  display: block;
+  font-family: monaco, Consolas, "Liberation Mono", Courier, monospace;
+  font-size: 12px;
+  line-height: 1.5em;
+  margin: 15px 0;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  padding: 10px;
+  white-space: pre;
+}
+
+.video-image {
+  display: block;
+  width: 423px;
+  height: 252px;
+  background: #f0f1f3 none repeat scroll 0 0;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAAAAXNSR0IArs4c6QAAA+pJREFUaAXVmc9LFkEcxn3th5TRxYrqlBUGdqssTKNDEIlRp+hWl6iLh4gg7cehS0FBERIFHQqiQ0KYGP4DJUUQlZAZoSfJIIR+QmW1fZ59d2RXX3ffeXff1X3geWdn5jvf7zOzs/vO7FRUZBS5uLodx5mHjybYAtfA1T5OcP3Bx3dc9+ZyuQHS9IHYHGyFt+EnaIsRGlyBDaWqtx5xgu0k2GXoDzpE/iF8Df0jvIC8/w5sJ7/PKyNx0c1vB3dBdyN5IHgDfAQNRrk4BetsomGvu7UNXoLfoDABb8AaG1+RtjjUtPgKhc+wAy6KbBhhgI8V8DqUcGEYboxoVlw1jk7Cv1C4B5MdFWTgsw4+hYIGaG9x6mawwsFNeQIS3j6DWSLF+K+Cd6GgeEdLckxDjbTwHeqBSgXEaof/oKbPLqugNGiB6rUcpCbaiCTmeSiMw/WmPDSVIdQDKJwONS5TJXH15nkgAWAQVkeGwqhH1uB+pHEZDYhfDQckBJwLDYVBk2uWf7KXhxqnUImW5qL0YNTvGYb3MAXRJgR6zAy4ZsoCKQa7PdFjpNFzKtC6fBm01MM/8BdcaSJVmgvSA951J+uGH77yWb1EyyACeuFCuD8ghp5Uwo9QqA9UFpmh3QmoVd8RaL14CwuDv0NQ6AvYUdDoFjvO+0CFRYb2vZ4PJU9gMmsONOCrBmq6/IRLJMtMlVZPY4+XlpL4R1kbi5cEuQhjL8aYLuP464dV0P03NcLXUiC8yCeJ/GotrvXNG8RrdxQXRpur1Qhf5Xkdi+u9QPtayvoQ3wVNnAJmkUXaoAjamExOFTdD3lSqLmnorTWE+DZoBswmhtGWunCJXAo74TPEr1OBBcxscO+a6bnjOfA/YBY+XVObtptosdk2gN/eCA/0xm9gcW06H9XkOQZbeFN0RRlOqQ9MZyM8MH+mNEgq+wVHbbAR0a9KcGoebHeQ53sOkhjxMC0a3eMINnHCbGeqKzjiw551rHlXIOIIZS0IPhhTtFwbbfKZB094En/5/m8uv/F5Acb+15RC/Ez7y3eVU5HEIusOfoTHMLF1iif8sByD4CLLq7yVr3POuL2x/KHtMrgD2rwWi4qCz24oHJvWgMJMbSQCHUB89rZu6gHCs7lZ9sSbzelc+jxxNjA1CmUY9bn4QWhxIa3TyhCfvU9wpheIz95HT594nRII2fnM7BOvkZdwIa0P+2bzbmSUliI4e0cppquI13GHfyE1Sr7Uw6uttI11eGW9riBgoePCt3RQ32S0QdCaWxsTcfaPCxExCcQncUB7FT8Nk04tL6xHfKp/gutIvBnugbVQOxVts5TOrSNxBM06/gO965j0qERniwAAAABJRU5ErkJggg==");
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: auto;
+}
+
+.mu-ue-image-tips:empty:before {
+  content: "attr(placeholder)";
+}
+
+.mu-ue-image-tips:focus:before {
+  content: none;
+}

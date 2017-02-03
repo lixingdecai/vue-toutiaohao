@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="15px" viewBox="0 0 13 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>el-icon-caret-right</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="图标" transform="translate(-268.000000, -234.000000)" fill="#FFFFFF">
+            <g id="Group-3" transform="translate(254.000000, 220.000000)">
+                <path d="M19.9261698,15.3989499 C20.2177421,14.9297273 20.6921078,14.9323565 20.9820464,15.3989499 L27.3504965,25.6475946 C27.9337193,26.5861657 27.5058325,27.3470278 26.4082636,27.3470278 L14.4999526,27.3470278 C13.396349,27.3470278 12.9753454,26.5848002 13.5577197,25.6475946 L19.9261698,15.3989499 Z" id="el-icon-caret-right" transform="translate(20.453663, 21.186713) rotate(90.000000) translate(-20.453663, -21.186713) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

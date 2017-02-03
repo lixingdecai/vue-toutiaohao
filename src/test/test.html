@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Vue.js File Upload Component</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <style type="text/css" media="screen">
+    .progress-bar {
+      opacity: 1;
+      height: 2px;
+      margin: 0.4em 0;
+      width: 0;
+      background: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <!-- only show the menu when ready -->
+    <ul v-show="uploadedFiles.length > 0">
+      <!-- loop through the completed files -->
+      <li v-for="file in uploadedFiles">Name: <em>{{ file.name }}</em> Size: <em>{{ file.size | prettyBytes }}</em></li>
+    </ul>
+    <!-- only show when ready, fileProgress is a percent -->
+    <div class="progress-bar" style="width: {{ fileProgress }}%" v-show="fileProgress > 0" ></div>
+    <!-- message for all uploads completing -->
+    <p v-if="allFilesUploaded"><strong>All Files Uploaded</strong></p>
+    <!-- full usage example -->
+    <file-upload class="my-file-uploader" name="myFile" id="myCustomId" action="upload.php" multiple>Inside Slot Text</file-upload>
+    <!-- minimal usage -->
+    <file-upload name="anotherFile" action="upload.php"></file-upload>
+    <file-upload name="patchFile" action="upload.php" method="PATCH"></file-upload>
+  </div>
+  <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+  <script src="vue.file-upload.js"></script>
+  <script src="vue.pretty-bytes.js"></script>
+  <script>
+    var App = new Vue({
+      el: '#app',
+      data: {
+        uploadedFiles: [], // my list for the v-for
+        fileProgress: 0, // global progress
+        allFilesUploaded: false // is everything done?
+      },
+      events: {
+        onFileClick: function(file) {
+          console.log('onFileClick', file);
+        },
+        onFileChange: function(file) {
+          console.log('onFileChange', file);
+          // here is where we update our view
+          this.fileProgress = 0;
+          this.allFilesUploaded = false;
+        },
+        beforeFileUpload: function(file) {
+          // called when the upload handler is called
+          console.log('beforeFileUpload', file);
+        },
+        afterFileUpload: function(file) {
+          // called after the xhr.send() at the end of the upload handler
+          console.log('afterFileUpload', file);
+        },
+        onFileProgress: function(progress) {
+          console.log('onFileProgress', progress);
+          // update our progress bar
+          this.fileProgress = progress.percent;
+        },
+        onFileUpload: function(file, res) {
+          console.log('onFileUpload', file, res);
+          // update our list
+          this.uploadedFiles.push(file);
+        },
+        onFileError: function(file, res) {
+          console.error('onFileError', file, res);
+        },
+        onAllFilesUploaded: function(files) {
+          console.log('onAllFilesUploaded', files);
+          // everything is done!
+          this.allFilesUploaded = true;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
