@@ -70,23 +70,6 @@ export default {
     return {
       loading: false,
       counts: {},
-      data: {
-        page_info: {
-          'page': 1,
-          'total_number': 2,
-          'total_page': 1,
-          'page_size': 20
-        },
-        data: [{
-          'id': 1,
-          'title': '\u7f8e\u67da\u53f7\u4e0a\u7ebf',
-          'updated_at': 1485243773
-        }, {
-          'id': 4,
-          'title': '\u516c\u544a\u6d4b\u8bd5\uff5e\uff5e\uff5e\uff5e\uff5e\uff5e\uff5e',
-          'updated_at': 1485243852
-        }]
-      },
       pageInfo: {
         page: 1,
         page_size: 20,
@@ -114,23 +97,21 @@ export default {
         }
       });
     },
-    fetchAnnouceList(page) {
+    fetchAnnouceList() {
       const self = this;
-      if (json && json.code === 0) {
-        const data = json.data;
-        self.pageInfo = data.page_info;
-        self.items = data.data;
-        self.loading = false;
-      }
-      // API.fetchAnnouceList(page).then(json => {
-      //   console.log('annouce json: ', JSON.stringify(json, null, 2));
-      //   if (json && json.code === 0) {
-      //     const data = json.data;
-      //     self.pageInfo = data.page_info;
-      //     self.items = data.data;
-      //     self.loading = false;
-      //   }
-      // });
+      // const data = this.data;
+      // self.pageInfo = data.page_info;
+      // self.items = data.data;
+      self.loading = false;
+      API.fetchAnnouceList().then(json => {
+        console.log('annouce json: ', JSON.stringify(json, null, 2));
+        if (json && json.code === 0) {
+          const data = json.data;
+          self.pageInfo = data.page_info;
+          self.items = data.data;
+          self.loading = false;
+        }
+      });
     }
   }
 };

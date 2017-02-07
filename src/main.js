@@ -9,7 +9,8 @@ import 'assets/javascripts/polyfill';
 import 'assets/stylesheets/reset.scss';
 import 'assets/stylesheets/index.scss';
 import 'assets/stylesheets/ie.scss';
-import 'element-ui/lib/theme-default/index.css';
+// import 'element-ui/lib/theme-default/index.css';
+import '../theme/index.css';
 
 import router from './router';
 import store from './store';

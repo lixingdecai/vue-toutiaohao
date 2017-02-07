@@ -6,12 +6,9 @@
       </div>
     </div>
     <div class="notice-body" v-loading="loading" element-loading-text="拼命加载中">
-      <h2 class="notice-title">{{ noticeDetail.title }}</h2>
+      <h1 class="notice-title">{{ noticeDetail.title }}</h1>
+      <p class="notice-date">美柚号 {{ noticeDetail.updated_at | formatDate('yyyy-MM-dd') }}</p>
       <div v-html="noticeDetail.content" class="notice-content"></div>
-      <div class="notice-footer">
-        <p>{{ noticeDetail.updated_at | formatDate('yyyy-MM-dd') }}</p>
-        <p>美柚号</p>
-      </div>
     </div>
     <div class="notice-back">
       <el-button type="default" @click="goBack">返 回</el-button>
@@ -72,30 +69,39 @@ export default {
 }
 
 .notice-body {
-  margin: 30px 40px 0;
+  margin: 30px 40px;
   padding-bottom: 100px;
   border-bottom: 1px solid #ddd;
-  p {
-    line-height: 28px;
-  }
 }
 
 .notice-title {
-  font-size: 20px;
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 32px;
+  margin: 0;
+  font-weight: 400;
 }
 
-.notice-footer {
-  text-align: right;
-  padding: 40px 0;
-  p {
-    line-height: 26px;
+.notice-date {
+  color: #888;
+  line-height: 36px;
+  font-size: 14px;
+}
+
+.notice-content {
+  font-size: 16px;
+  line-height: 36px;
+  letter-spacing: 0;
+  ul {
+    margin-left: 60px;
+    li {
+      font-size: 16px;
+      line-height: 36px;
+      letter-spacing: 0;
+      list-style: disc;
+    }
   }
 }
 
 .notice-back {
   text-align: center;
-  padding: 30px 0;
 }
 </style>

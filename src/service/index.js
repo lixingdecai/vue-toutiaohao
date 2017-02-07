@@ -72,19 +72,12 @@ const fetchNotifyList = (page = 1, type = 0) => new Promise((resolve, reject) =>
  * 获取主页统计数据
  * @return {promise}   返回json信息
  */
-const fetchHomeAnalysis = () => new Promise((resolve, reject) => {
-  $.ajax({
-    url: API_URL.analysis,
-    type: 'GET',
-    data: {
-      action: 'home'
-    }
-  }).done(res => {
-    resolve(res);
-  }).fail(err => {
-    reject(err);
-  });
-});
+const fetchHomeAnalysis = () => {
+  const d = new $.Deferred();
+  const data = '{"code":0,"data":{"total_fans_count":0,"total_view_count":3534,"total_visitor_count":0,"total_news_count":83},"message":""}';
+  d.resolve(data);
+  return d.promise();
+};
 
 /**
  * 获取文章、用户、粉丝分析数据
@@ -115,20 +108,28 @@ const fetchAnalysisByAction = data => {
  * @param {int} page  页数
  * @return {promise}   返回json信息
  */
-const fetchAnnouceList = (page = 1) => new Promise((resolve, reject) => {
-  $.ajax({
-    url: API_URL.announce,
-    type: 'GET',
-    data: {
-      page: page,
-      action: 'list'
-    }
-  }).done(res => {
-    resolve(res);
-  }).fail(err => {
-    reject(err);
-  });
-});
+const fetchAnnouceList = () => {
+  const d = new $.Deferred();
+  const data = {
+    page_info: {
+      page: 1,
+      total_number: 2,
+      total_page: 1,
+      page_size: 20
+    },
+    data: [{
+      id: 1,
+      title: '\u7f8e\u67da\u53f7\u4e0a\u7ebf',
+      updated_at: 1485243773
+    }, {
+      id: 4,
+      title: '\u516c\u544a\u6d4b\u8bd5\uff5e\uff5e\uff5e\uff5e\uff5e\uff5e\uff5e',
+      updated_at: 1485243852
+    }]
+  };
+  d.resolve(data);
+  return d.promise();
+};
 
 /**
  * 获取公告详情

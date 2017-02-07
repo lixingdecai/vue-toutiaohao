@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="news-wrap" v-loading="loading" element-loading-text="拼命加载中">
+    <div class="news-wrap">
       <div class="news-title">
         <span class="news-title__tips">消息中心</span>
         <div class="news-breadcrumb">
@@ -21,46 +21,53 @@
           </router-link>
         </div>
       </div>
-      <ul v-if="tab === 1 && items && items.length" class="news-body news-notice">
-        <li v-for="item in items" class="news-body__item clearfix">
-          <div class="news-item__left">
-            <img src="../../assets/images/icon-announce.png" alt="">
-          </div>
-          <div class="news-item__title">
-            {{ item.content }}
-          </div>
-          <div class="news-item__right">{{ item.actionTime | formatDate('yyyy-MM-dd hh:mm') }}</div>
-        </li>
-      </ul>
-      <ul v-else-if="tab !== 1 && items && items.length" class="news-body news-follow">
-        <li v-for="item in items" class="news-body__item news-follow__item">
-          <div class="news-item__left">
-            <img :src="item.avatar" alt="avatar">
-          </div>
-          <div class="news-item__title">
-            <span class="news-item__fans">{{ item.userName || '小柚子' }}</span>&nbsp;<span v-if="tab === 2">关注</span><span v-else-if="tab === 3">收藏</span><span v-else-if="tab === 4">转发</span>了你的文章&nbsp;<router-link class="news-item__article" :to="{ name: 'manager' }" tag="span">{{ item.content }}</router-link>
-          </div>
-          <div class="news-item__right">{{ item.actionTime | formatDate('yyyy-MM-dd hh:mm') }}</div>
-        </li>
-      </ul>
-      <div v-else class="news-footer">
-        没有更多数据
+      <div v-loading="loading" element-loading-text="拼命加载中">
+        <ul v-if="tab === 1 && items && items.length" class="news-body news-notice">
+          <li v-for="item in items" class="news-body__item clearfix">
+            <div class="news-item__left">
+              <img src="../../assets/images/icon-announce.png" alt="">
+            </div>
+            <div class="news-item__title">
+              <router-link v-if="item.redirect_type === 1" :to="{ name: 'operation' }" tag="span" class="news-item__new line-1">{{ item.content.trim() }}</router-link>
+              <router-link v-else-if="item.redirect_type === 2" :to="{ name: 'account' }" tag="span" class="news-item__new line-1">{{ item.content.trim() }}</router-link>
+              <router-link v-else-if="item.redirect_type === 3" :to="{ name: 'manager' }" tag="span" class="news-item__new line-1">{{ item.content.trim() }}</router-link>
+              <router-link v-else-if="item.redirect_type === 4" :to="{ name: 'comments' }" tag="span" class="news-item__new line-1">{{ item.content.trim() }}</router-link>
+              <span v-else class="news-item__new line-1">{{ item.content.trim() }}</span>
+            </div>
+            <div class="news-item__right">{{ item.actionTime | formatDate('yyyy-MM-dd hh:mm') }}</div>
+          </li>
+        </ul>
+        <ul v-else-if="tab !== 1 && items && items.length" class="news-body news-follow">
+          <li v-for="item in items" class="news-body__item news-follow__item">
+            <div class="news-item__left">
+              <img :src="item.avatar | https" @error="imageLoadOnError($event)" alt="avatar">
+            </div>
+            <div class="news-item__title">
+              <span class="news-item__fans">{{ item.userName || '小柚子' }}</span>&nbsp;<span v-if="tab === 2">关注</span><span v-else-if="tab === 3">收藏</span><span v-else-if="tab === 4">转发</span>了你的文章&nbsp;<router-link class="news-item__article line-1" :to="{ name: 'manager' }" tag="span">{{ item.content }}</router-link>
+            </div>
+            <div class="news-item__right">{{ item.actionTime | formatDate('yyyy-MM-dd hh:mm') }}</div>
+          </li>
+        </ul>
+        <div v-else class="news-footer">
+          暂时没有数据~
+        </div>
+        <div v-if="pageInfo && pageInfo.total_number && pageInfo.total_number > 0" class="news-pagination">
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="pageInfo.page"
+            :page-size="pageInfo.page_size"
+            layout="prev, pager, next, jumper"
+            :total="pageInfo.total_number">
+          </el-pagination>
+        </div>
       </div>
-      <div v-if="pageInfo && pageInfo.total_number && pageInfo.total_number > 0" class="news-pagination">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="pageInfo.page"
-          :page-size="pageInfo.page_size"
-          layout="prev, pager, next, jumper"
-          :total="pageInfo.total_number">
-        </el-pagination>
-    </div>
     </div>
   </div>
 </template>
 
 <script>
 import API from '../../service';
+import _ from '../../util/tools';
 
 export default {
   name: 'home-news',
@@ -85,6 +92,9 @@ export default {
     }
   },
   methods: {
+    imageLoadOnError(event) {
+      event.currentTarget.setAttribute('src', _.getAvatar());
+    },
     fetchInit() {
       const type = parseInt(this.$route.query.tab, 10);
       this.tab = type;
@@ -101,9 +111,12 @@ export default {
           self.items = data.data;
           self.loading = false;
         } else {
-          self.items = [];
-          self.pageInfo = {};
-          self.loading = false;
+          self.$message({
+            showClose: true,
+            duration: 2000,
+            message: json.message,
+            type: 'error'
+          });
         }
       });
     },
@@ -181,6 +194,7 @@ export default {
       display: block;
       float: left;
       line-height: 72px;
+      width: 650px;
       .news-item__fans {
         color: #65abec;
       }
@@ -189,6 +203,17 @@ export default {
         cursor: pointer;
       }
       .news-item__article:hover {
+        text-decoration: underline;
+      }
+    }
+    .news-item__new {
+      display: inline-block;
+      width: 650px;
+      line-height: 22px;
+      height: 22px;
+      cursor: pointer;
+      vertical-align: middle;
+      &:hover {
         text-decoration: underline;
       }
     }

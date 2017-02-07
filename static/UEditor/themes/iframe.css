@@ -1,4 +1,8 @@
 /*可以在这里添加你自己的css*/
+/*@import url("reset.css");*/
+/*@import url("common.css");*/
+@import url("news.css");
+
 
 .mu-ue-image {
   max-width: 100%;
@@ -280,6 +284,7 @@ body pre, body code {
   background-position: center;
   background-repeat: no-repeat;
   margin: auto;
+  opacity: 1;
 }
 
 .mu-ue-image-tips:empty:before {

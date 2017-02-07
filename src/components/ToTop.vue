@@ -40,7 +40,7 @@ export default {
       window.scrollTo(0, 0);
     },
     handleScroll() {
-      this.show = (window.scrollY > 200) && true || false;
+      this.show = (window.scrollY > 400) && true || false;
     }
   }
 };
@@ -59,6 +59,10 @@ export default {
 }
 
 .fade-enter-active, .fade-leave-active {
+  -webkit-transition: all 0.25s linear;
+  -ms-transition: all 0.25s linear;
+  -o-transition: all 0.25s linear;
+  -moz-transition: all 0.25s linear;
   transition: all 0.25s linear;
 }
 

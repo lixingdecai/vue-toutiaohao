@@ -1,16 +1,17 @@
 <template lang="html">
-  <footer class="footer">
-    <span class="footer-detail">闽ICP备13020990号-5</span>
+  <footer  class="footer">
+    <span class="footer-detail">闽ICP备*******-5</span>
     <span class="footer-detail">
-      <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=35020302000042" target="_blank"><img src="../assets/images/ghs.png" height="20" width="20" class="ghs" alt="ghs" />闽公网安备 35020302000042号</a>
+      <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=35020302000042" target="_blank"><img src="../assets/images/ghs.png" height="20" width="20" class="ghs" alt="ghs" />什么什么备案</a>
     </span>
-    <span class="footer-detail">Copyright&nbsp;&copy;&nbsp;2016&nbsp;Meetyou.&nbsp;保留所有权利</span>
+    <span class="footer-detail">Copyright&nbsp;&copy;&nbsp;2016&nbsp;李姓的菜.&nbsp;保留所有权利</span>
   </footer>
 </template>
 
 <script>
+
 export default {
-  name: 'footer'
+  name: 'footer',
 };
 </script>
 

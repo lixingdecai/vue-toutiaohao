@@ -1,3 +1,7 @@
+@import 'reset';
+@import 'ie';
+@import 'iconfont';
+
 .container {
   width: 1200px;
   margin: 40px auto 0;
@@ -128,4 +132,11 @@
   margin: 0 auto;
   text-align: center;
   padding: 30px 0 100px;
+}
+
+.line-1 {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  overflow: hidden;
 }

@@ -3,81 +3,101 @@
   <div class="image-picker picker-dialog-content" v-if="publishVideoForm==false">
     <div>
       <i></i>
-      <el-button type="primary" @click="publishVideoForm=true">上传图集</el-button>
+      <upload :onSuccess="onSuccess" :beforeUpload="beforeUpload">
+        <el-button type="primary">上传图集</el-button>
+      </upload>
       <div class="publish-pics-attention">
         <ul>
           <li>图集功能使用需知：</li>
           <li>1、图集支持绝大部分图片格式，大小不超过5M,最长边不超过1000像素；</li>
-          <li>1、禁止发布涉及政治敏感，黄色暴力，血腥恐怖等图集；</li>
+          <li>2、禁止发布涉及政治敏感，黄色暴力，血腥恐怖等图集；</li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="publish-pics-list-wrap" v-if="publishVideoForm==true">
-    <div class="publish-pics-list">
-      <draggable :list="publishModal.images" :options="{'handle':'.publish-pics-sort','connectWith': '.publish-pics-list'}">
-        <div id="sortable" class="publish-pics-rows" v-for="(item, index) in publishModal.images">
-          <div class="publish-pics-img" @click="delPic(index)">
-            <img :src="item.src" />
+  <div v-loading="loading" element-loading-text="保存中...">
+    <div class="publish-pics-list-wrap" v-if="publishVideoForm==true">
+      <div class="publish-pics-list">
+        <draggable :list="publishModal.images" :options="{'handle':'.publish-pics-sort','connectWith': '.publish-pics-list'}">
+          <div id="sortable" class="publish-pics-rows" v-for="(item, index) in publishModal.images">
+            <div class="publish-pics-img" v-loading="item.loading">
+              <div v-show="!item.src" class="publish-pics-uploading">{{item.message}}</div>
+              <img v-show="item.src" :src="item.src" />
+            </div>
+            <div class="publish-pics-desc">
+              <textarea maxlength="200" placeholder="图片说明（不超过200个字）" v-model="item.remark"></textarea>
+            </div>
+            <div class="publish-pics-opers">
+              <el-tooltip content="重新上传" placement="top" effect="light">
+                <upload :onSuccess="onSuccess" :beforeUpload="beforeReUpload" :fileId="item.id">
+                  <div class="publish-pics-edit"></div>
+                </upload>
+              </el-tooltip>
+              <el-tooltip content="删除" placement="top" effect="light">
+                <div class="publish-pics-del" @click="delPic(index)"></div>
+              </el-tooltip>
+              <el-tooltip content="拖拽排序" placement="top" effect="light">
+                <div class="publish-pics-sort" :key="index"></div>
+              </el-tooltip>
+            </div>
           </div>
-          <div class="publish-pics-desc">
-            <textarea class="textaaa" placeholder="图片说明（不超过200个字）" v-model="item.remark"></textarea>
-          </div>
-          <div class="publish-pics-opers">
-            <div class="publish-pics-edit"></div>
-            <div class="publish-pics-del" @click="delPic(index)"></div>
-            <div class="publish-pics-sort" :key="index"></div>
-          </div>
+        </draggable>
+      </div>
+      <div class="publish-pics-add-wrap">
+        <div class="publish-pics-add">
+          <upload :onSuccess="onSuccess" :beforeUpload="beforeUpload">
+            <span>
+              <i class="el-icon-plus"></i>
+                添加图片
+              </span>
+          </upload>
         </div>
-      </draggable>
-    </div>
-    <div class="publish-pics-add-wrap">
-      <div class="publish-pics-add" @click="addPic()">
-        <span>
-            <i class="el-icon-plus"></i>
-              添加图片
-            </span>
-      </div>
-      <div class="publish-pics-nums">
-        已添加{{pics.length}}张图片
+        <div class="publish-pics-nums">
+          已添加{{publishModal.images.length}}张图片
+        </div>
       </div>
     </div>
+    <el-form :model="publishModal" :rules="rules" ref="publishModal" label-position="left" label-width="120px" class="publish-pics-form" v-if="publishVideoForm==true">
+      <el-form-item label="标题" prop="title">
+        <div class="">
+          <el-input :maxlength="30" :minlength="5" class="title" v-model="publishModal.title"></el-input>
+          <span class="title_tip">{{publishModal.title.length}}/30</span>
+        </div>
+        <span class="title-des">5-30个字</span>
+      </el-form-item>
+      <el-form-item label="分类" prop="category_id">
+        <el-select v-model="publishModal.category_id">
+          <el-option v-for="item in publish_category" :label="item.tag_name" :value="item.id + ''"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitPics()">发表</el-button>
+        <el-button @click="saveDraft()">存草稿</el-button>
+        <!-- <el-button>客户端预览</el-button> -->
+        <el-button @click="cancel">取消</el-button>
+      </el-form-item>
+    </el-form>
   </div>
-  <el-form ref="form" :model="form" label-position="left" label-width="120px" class="publish-pics-form" v-if="publishVideoForm==true">
-    <el-form-item label="标题">
-      <div class="">
-        <el-input class="title" v-model="publishModal.title"></el-input>
-        <span class="title_tip">0/30</span>
-      </div>
-      <span class="title-des">5-30个字</span>
-    </el-form-item>
-    <el-form-item label="分类">
-      <el-select v-model="publishModal.category_id">
-        <el-option v-for="item in publish_category" :label="item.tag_name" :value="item.id"></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitPics()">发表</el-button>
-      <el-button @click="submitPics()">存草稿</el-button>
-      <el-button>客户端预览</el-button>
-      <el-button>取消</el-button>
-    </el-form-item>
-  </el-form>
 </div>
 </template>
 <script>
 // import $ from 'jquery';
 import draggable from 'vuedraggable';
-// import 'sortablejs';
 import API from '../../service';
+import upload from '../../components/Upload';
 
 export default {
   name: 'publishVideo',
   components: {
     draggable,
+    upload,
+  },
+  props: {
+    id: String
   },
   data() {
     return {
+      loading: false,
       publishVideoForm: false,
       pics: [],
       publishModal: {
@@ -93,72 +113,155 @@ export default {
         status: 1,
         multi_video: [],
       },
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+      uploadImageList: [],
+      rules: {
+        title: [{
+          required: true,
+          message: '请填写标题',
+          trigger: 'blur'
+        }, {
+          min: 5,
+          max: 30,
+          message: '标题为5-30个字',
+          trigger: 'blur'
+        }],
+        category_id: [{
+          required: true,
+          message: '请填写分类',
+          trigger: 'change'
+        }]
       }
     };
   },
+  created() {},
   mounted() {
-    this.$nextTick(() => {
-      // $('.textaaa').on('click', function n() {
-      //   console.log(this);
-      // });
-      // $('.column').sortable({
-      //   connectWith: '.column',
-      //   handle: '.portlet-header',
-      //   cancel: '.portlet-toggle',
-      //   placeholder: 'portlet-placeholder ui-corner-all'
-      // });
-    });
-    //
     this.init();
+    if (this.id) {
+      API.fetchArticleDetail(this.id).then(result => {
+        this.publishModal = result.data;
+        this.publishModal.action = 'update';
+        this.publishModal.category_id = this.publishModal.category_id + '';
+        this.publishVideoForm = true;
+      });
+    }
   },
   methods: {
     init: function init() {
       console.log('publish video page init');
-      this.publish_category = API.getRemoteArticleCategory();
+      this.publish_category = API.getRemoteArticleCategory(() => {
+        this.publishModal.action = 'update';
+      }, () => {
+        this.publishModal.action = 'add';
+      });
     },
     submitPics: function submitPics() {
       this.publishModal.status = 1;
-      API.saveUpdateArticle(this.publishModal).then(result => {
-        console.log('发表成功' + result);
-        this.$message({
-          message: '视频发表成功',
-          type: 'success'
-        });
-      }, err => {
-        this.$message.error('发表失败:' + err.message);
-        console.error('发表失败:' + err.message);
+      this.$refs.publishModal.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          API.saveUpdateArticle(this.publishModal).then(result => {
+            console.log('发表成功' + result);
+            this.$message({
+              message: '图集发表成功',
+              type: 'success'
+            });
+            this.loading = false;
+            this.$router.push('/home/manager');
+          }, err => {
+            this.loading = false;
+            this.$message.error('发表失败:' + err.message);
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+        return false;
       });
     },
     saveDraft: function saveDraft() {
       this.publishModal.status = 8;
-      API.saveUpdateArticle(this.publishModal).then(() => {
-        this.$message({
-          message: '保存草稿成功',
-          type: 'success'
-        });
-        console.log('保存草稿成功');
-      }, err => {
-        this.$message.error('保存草稿失败：' + err.message);
-        console.error('保存草稿失败:' + err.message);
+      this.$refs.publishModal.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          API.saveUpdateArticle(this.publishModal).then(result => {
+            console.log('保存草稿成功' + result);
+            this.$message({
+              message: '保存草稿成功',
+              type: 'success'
+            });
+            this.loading = false;
+            this.$router.push('/home/manager');
+          }, err => {
+            this.loading = false;
+            this.$message.error('保存草稿失败:' + err.message);
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+        return false;
       });
     },
-    addPic() {
-      const o = {};
-      o.src = '//sc.seeyouyima.com/forum/data/5840d5e5b16ad_549_418.jpg?imageView2/2/w/750/h/500';
-      o.remark = 'aaaaaaa' + Math.random();
-      this.publishModal.images.push(o);
-    },
+    // addPic() {
+    //   const o = {};
+    //   o.src = '//sc.seeyouyima.com/forum/data/5840d5e5b16ad_549_418.jpg?imageView2/2/w/750/h/500';
+    //   o.remark = 'aaaaaaa' + Math.random();
+    //   this.publishModal.images.push(o);
+    // },
     delPic(index) {
       this.publishModal.images.splice(index, 1);
+    },
+    cancel() {
+      this.$confirm('确认取消本次的发布，取消后编辑的内容将无法找回', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$router.push('/home');
+      }).catch(() => {});
+    },
+    onSuccess(url, up, file) {
+      console.log('files :  ', url, up, file);
+      if (this.publishModal.images.length) {
+        for (const index in this.publishModal.images) {
+          if (file.id === this.publishModal.images[index].id) {
+            this.publishModal.images[index].src = url;
+            this.publishModal.images[index].url = url;
+            this.publishModal.images[index].loading = false;
+          }
+        }
+      }
+      // this.publishModal.video.url = url;
+      console.log('onVideoUploadSuccess ', this.publishModal);
+    },
+    beforeReUpload(up, file) {
+      console.log('beforeReUpload', this.publishModal, up, file);
+      if (this.publishModal.images.length) {
+        for (const index in this.publishModal.images) {
+          console.log('----id---- ', this.publishModal.images[index].id, file.imageId);
+          if (file.imageId === this.publishModal.images[index].id) {
+            this.publishModal.images[index].loading = true;
+            this.publishModal.images[index].src = '';
+            this.publishModal.images[index].url = '';
+            console.log('beforeReUpload2', this.publishModal);
+          }
+        }
+      }
+    },
+    beforeUpload(up, file) {
+      console.log('beforeUpload : ', file);
+      this.publishVideoForm = true;
+      if (file) {
+        const ui = {};
+        ui.id = file.id;
+        ui.name = file.name;
+        ui.src = '';
+        ui.url = '';
+        ui.remark = '';
+        ui.loading = false;
+        ui.message = '上传中...';
+        this.publishModal.images.push(ui);
+      }
     }
   }
 };
@@ -205,6 +308,10 @@ export default {
   height: 92px;
   padding-bottom: 26px;
   vertical-align: middle;
+}
+
+.publish-pics-box .image-picker {
+  margin-top: 150px;
 }
 
 .publish-pics-box .edit-input .modify-poster {
@@ -268,6 +375,11 @@ export default {
   white-space: nowrap;
 }
 
+.publish-pics-uploading {
+  color: #ff74b9;
+  font-size: 12px;
+}
+
 .publish-pics-box .video-feedback-retry {
   color: #4e7dd2;
   float: left;
@@ -302,6 +414,9 @@ export default {
 
 .publish-pics-img {
   float: left;
+  line-height: 110px;
+  width: 110px;
+  text-align: center;
 }
 
 .publish-pics-img img {

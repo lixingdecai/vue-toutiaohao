@@ -6,31 +6,30 @@
           <span class="el-breadcrumb__item" :class="status === 0 ? 'active':''" @click="handleStatus(0)">
             <span class="el-breadcrumb__item__inner">全部</span>
             <span class="el-breadcrumb__separator">/</span>
-          </span> 
+          </span>
           <span class="el-breadcrumb__item" :class="status === 1 ? 'active':''" @click="handleStatus(1)">
             <span class="el-breadcrumb__item__inner">已发表</span>
             <span class="el-breadcrumb__separator">/</span>
-          </span> 
+          </span>
           <span class="el-breadcrumb__item" :class="status === 10 ? 'active':''" @click="handleStatus(10)">
             <span class="el-breadcrumb__item__inner">未通过审核</span>
             <span class="el-breadcrumb__separator">/</span>
-          </span> 
+          </span>
           <span class="el-breadcrumb__item" :class="status === 8 ? 'active':''" @click="handleStatus(8)">
             <span class="el-breadcrumb__item__inner">草稿</span>
             <span class="el-breadcrumb__separator">/</span>
-          </span> 
+          </span>
           <span class="el-breadcrumb__item" :class="status === 7 ? 'active':''" @click="handleStatus(7)">
             <span class="el-breadcrumb__item__inner">下架</span>
             <span class="el-breadcrumb__separator">/</span>
-          </span> 
+          </span>
           <span class="el-breadcrumb__item" :class="status === 4 ? 'active':''" @click="handleStatus(4)">
             <span class="el-breadcrumb__item__inner">审核中</span>
             <span class="el-breadcrumb__separator">/</span>
           </span>
         </div>
       </div>
-      
-       <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="全部" name="first">
           <div v-if="articleList && articleList.length != 0">
             <managerList @renderPageList="pageList" :articleList="articleList"></managerList>
@@ -64,17 +63,15 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-
-      <div class="manager-pagination" v-if="total != 0">
+      <div class="manager-pagination" v-if="pageInfo && pageInfo.total_number && pageInfo.total_number > 0">
         <el-pagination
           @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-size="20"
+          :current-page="pageInfo.page"
+          :page-size="pageInfo.page_size"
           layout="prev, pager, next, jumper"
-          :total="total">
+          :total="pageInfo.total_number">
         </el-pagination>
       </div>
-
     </div>
   </div>
 </template>
@@ -95,13 +92,12 @@ export default {
       activeName: 'first',
       currentPage: 1,
       articleList: [],
-      total: 0,
-      page_size: 20,
+      pageInfo: {},
       type: 0,
       status: 0
     };
   },
-  created() {
+  mounted() {
     // 获取文章列表
     this.pageList(this.type, this.status, this.currentPage);
   },
@@ -139,11 +135,11 @@ export default {
     pageList(type, status, page) {
       this.loading = true;
       API.fetchArticleList(type, status, page).then(json => {
+        console.log('ArticleList json: ', JSON.stringify(json, null, 2));
         if (json.code === 0) {
           const data = json.data;
           this.articleList = data.data;
-          this.total = data.page_info.total_number;
-          this.page_size = data.page_info.page_size;
+          this.pageInfo = data.page_info || {};
         } else {
           this.$message.error(json.message);
         }
@@ -154,8 +150,7 @@ export default {
       });
     },
     handleCurrentChange(val) {
-      this.currentPage = val;
-      this.pageList(this.type, this.status, this.currentPage);
+      this.pageList(this.type, this.status, val);
     }
   }
 };
@@ -183,7 +178,7 @@ export default {
 
 .manager-status {
   position: absolute;
-  right: 15px;
+  right: 40px;
   top: 23.5px;
   z-index: 1;
 }

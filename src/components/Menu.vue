@@ -5,7 +5,7 @@
       <el-menu-item index="publish" :route="{ name: 'publish', params: { tabname: 2 }}" class="menu-line"><i class="el-menu-icon el-icon-add"></i>发表</el-menu-item>
       <el-menu-item-group class="menu-line">
         <template slot="title"><i class="el-menu-icon el-icon-article"></i>文章管理</template>
-          <el-menu-item index="manager" :route="{ name: 'manager' }">文章管理</el-menu-item>
+          <el-menu-item index="manager" :route="{ name: 'manager' }">手动更新</el-menu-item>
           <el-menu-item index="comments" :route="{ name: 'comments' }">评论管理</el-menu-item>
           <!-- <el-menu-item index="feeds" :route="{ name: 'feeds' }">内容源管理</el-menu-item> -->
       </el-menu-item-group>
@@ -16,12 +16,9 @@
           <el-menu-item index="fans" :route="{ name: 'fans' }">粉丝分析</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group class="menu-line">
-        <template slot="title"><i class="el-menu-icon el-icon-account"></i>账号信息</template>
-          <el-menu-item index="information" :route="{ name: 'information' }">基本信息</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group class="menu-line">
-        <template slot="title"><i class="el-menu-icon el-icon-safe"></i>账号安全</template>
-          <a href="javascript:;" id="menuAccount" class="sso-menu" target="_blank">账号管理</a>
+        <template slot="title"><i class="el-menu-icon el-icon-safe"></i>账号管理</template>
+          <el-menu-item index="information" :route="{ name: 'information' }">账号信息</el-menu-item>
+          <a href="javascript:;" id="menuAccount" class="sso-menu" target="_blank">账号设置</a>
           <a href="javascript:;" id="menuPassword" class="sso-menu" target="_blank">密码修改</a>
           <el-menu-item index="logs" :route="{ name: 'logs' }">操作日志</el-menu-item>
       </el-menu-item-group>
@@ -30,6 +27,12 @@
 </template>
 
 <script>
+import {
+  mapGetters
+} from 'vuex';
+
+import _ from '../util/tools';
+
 export default {
   name: 'menu',
   data() {
@@ -37,7 +40,15 @@ export default {
       curPage: 'home'
     };
   },
+  computed: mapGetters({
+    user: 'getUserInfo'
+  }),
   mounted() {
+    console.log('menu mounted.');
+    const accountUrl = `${_.getSSOAddr()}home`;
+    const passUrl = `${_.getSSOAddr()}home/password?mobile=${this.user.phone}`;
+    document.getElementById('menuAccount').setAttribute('href', accountUrl);
+    document.getElementById('menuPassword').setAttribute('href', passUrl);
   }
 };
 </script>

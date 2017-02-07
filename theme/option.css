@@ -1,0 +1,140 @@
+@charset "UTF-8";
+:root{
+    /* Transition
+  -------------------------- */
+    /* Colors
+  -------------------------- */
+    /* 20a0ff */
+    /* Link
+  -------------------------- */
+    /* Border
+  -------------------------- */
+    /* Box-shadow
+  -------------------------- */
+    /* Fill
+  -------------------------- */
+    /* Font
+  -------------------------- */
+    /* Size
+  -------------------------- */
+    /* z-index
+  -------------------------- */
+    /* Disable base
+  -------------------------- */
+    /* Icon
+  -------------------------- */
+    /* Checkbox
+  -------------------------- */
+    /* Radio
+  -------------------------- */
+    /* Select
+  -------------------------- */
+    /* Alert
+  -------------------------- */
+    /* Message Box
+  -------------------------- */
+    /* Message
+  -------------------------- */
+    /* Notification
+  -------------------------- */
+    /* Input
+  -------------------------- */
+    /* Cascader
+  -------------------------- */
+    /* Group
+  -------------------------- */
+    /* Tab
+  -------------------------- */
+    /* Button
+  -------------------------- */
+    /* cascader
+  -------------------------- */
+    /* Switch
+ -------------------------- */
+    /* Dialog
+ -------------------------- */
+    /* Table
+ -------------------------- */
+    /* #e0e6ed */
+    /* #1f2d3d */
+    /* #EFF2F7 */
+    /* Pagination
+ -------------------------- */
+    /* #99a9bf */
+    /* Popover
+ -------------------------- */
+    /* Tooltip
+  -------------------------- */
+    /* Tag
+  -------------------------- */
+    /* Dropdown
+  -------------------------- */
+    /* Badge
+  -------------------------- */
+    /* Card
+  --------------------------*/
+    /* Slider
+  --------------------------*/
+    /* Steps
+  --------------------------*/
+    /* Steps
+  --------------------------*/
+    /* Rate
+  --------------------------*/
+    /* DatePicker
+  --------------------------*/
+    /* Loading
+  --------------------------*/
+    /* Scrollbar
+  --------------------------*/
+    /* Carousel
+  --------------------------*/
+    /* Collapse
+  --------------------------*/
+}
+
+.el-select-dropdown{}
+
+.el-select-dropdown__item{
+    font-size: 14px;
+    padding: 8px 10px;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #323232;
+    height: 36px;
+    line-height: 1.5;
+    font-weight: 400;
+    box-sizing: border-box;
+    cursor: pointer
+}
+
+.el-select-dropdown__item.hover{
+    background-color: #f7f7f7;
+    font-weight: 400
+}
+
+.el-select-dropdown__item.selected{
+    color: #fff;
+    background-color: #ec499a;
+    font-weight: 400
+}
+
+.el-select-dropdown__item.selected.hover{
+    background-color: #ff74b9;
+    font-weight: 400
+}
+
+.el-select-dropdown__item span{
+    line-height: 1.5 !important
+}
+
+.el-select-dropdown__item.is-disabled{
+    color: #ddd;
+    cursor: not-allowed
+}
+
+.el-select-dropdown__item.is-disabled:hover{
+    background-color: #fff
+}

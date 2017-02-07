@@ -4,10 +4,10 @@
   @setCity：将城市id传递给父组件
   :province：传递给组件初始省份id
   :city：传递给组件初始城市id
-  <area-choose 
-    @setProvince="ruleForm.provinceId = arguments[0]" 
-    @setCity="ruleForm.cityId = arguments[0]" 
-    :province="ruleForm.provinceId" 
+  <area-choose
+    @setProvince="ruleForm.provinceId = arguments[0]"
+    @setCity="ruleForm.cityId = arguments[0]"
+    :province="ruleForm.provinceId"
     :city="ruleForm.cityId">
   </area-choose>
 -->
@@ -17,7 +17,7 @@
       <el-select @change="changeProvince" v-model="currProvince">
         <el-option
           label="请选择"
-          value="">
+          value="0">
         </el-option>
         <el-option
           v-for="item in provinces"
@@ -30,7 +30,7 @@
       <el-select @change="changeCity" v-model="currCity">
         <el-option
           label="请选择"
-          value="">
+          value="0">
         </el-option>
         <el-option
           v-for="item in citys"

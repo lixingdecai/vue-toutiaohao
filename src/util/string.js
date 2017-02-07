@@ -17,5 +17,10 @@ module.exports = {
   IDCARD_EMPTY: '请输入身份证号码',
   IDCARD_FORMAT_ERROR: '身份证号码输入有误',
   MEIYOU_EMPTY: '请输入手机号/邮箱',
-  MEIYOU_FORMAT_ERROR: '输入的手机号/邮箱不正确'
+  MEIYOU_FORMAT_ERROR: '输入的手机号/邮箱不正确',
+  EMAIL_EMPTY: '请输入联系邮箱',
+  EMAIL_FORMAT_ERROR: '邮箱格式有误',
+  INFO_LENGTH_INVALID: '字数为10-300个字',
+  IDCARD_IMG_EMPTY: '请上传运营者身份证照片',
+  DEAL_NOT: '请同意并遵守协议'
 };

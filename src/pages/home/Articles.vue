@@ -10,7 +10,12 @@
         <span class="users-day" @click="chooseDay(14)" v-bind:class="[queryParam.days=='14' ? 'is-active' : '']">14天</span>
         <span class="users-day" @click="chooseDay(30)" v-bind:class="[queryParam.days=='30' ? 'is-active' : '']">30天</span>
         <span class="users-day users-line">/</span>
-        <el-date-picker v-model="dateRange" type="daterange" placeholder="选择日期范围" class="users-picker">
+        <el-date-picker
+          v-model="dateRange"
+          type="daterange"
+          placeholder="选择日期范围"
+          :picker-options="forbiddenFuture"
+          class="users-picker">
         </el-date-picker>
         <el-button type="default" icon="search" class="logs-date__btn" @click="chooseRange()"></el-button>
       </div>
@@ -20,7 +25,7 @@
           <div class="users-item__bottom">文章量</div>
         </li>
         <li class="articles-item users-item__line">
-          <div class="users-item__top">{{artclesData.total_exposure_count}}</div>
+          <div class="users-item__top">{{artclesData.total_show_count}}</div>
           <div class="users-item__bottom">推荐量</div>
         </li>
         <li class="articles-item users-item__line">
@@ -40,10 +45,7 @@
           <div class="users-item__bottom">收藏量</div>
         </li>
       </ul>
-      <!-- <div class="users-title">
-        数据详情
-      </div> -->
-      <div class="users-echat">
+      <div class="users-echat" v-loading="loading" element-loading-text="拼命加载中">
         <chart :options="echartConfig"></chart>
       </div>
     </div>
@@ -59,6 +61,7 @@ export default {
   name: 'home-articles',
   data() {
     return {
+      loading: false,
       queryParam: {
         action: 'article',
         days: '',
@@ -98,7 +101,7 @@ export default {
           data: []
         }, {
           name: '推荐量',
-          k: 'exposure_count',
+          k: 'show_count',
           type: 'line',
           smooth: true,
           barWidth: '10%',
@@ -132,9 +135,40 @@ export default {
           barWidth: '10%',
           data: []
         }],
+        color: ['#FF74B9', '#13CE66', '#FF9200', '#65ABEC', '#00D5AF', '#AE63FF'],
         animationDuration: 2000
       },
       dateRange: '',
+      forbiddenFuture: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        },
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
       artclesData: {
         total_view_count: 0, // 总阅读数
         total_share_count: 0, //  总分享数
@@ -142,7 +176,7 @@ export default {
         total_comment_count: 0, // 总评论数
         total_visitor_count: 0, // 总访客数
         total_fans_count: 0, // 总粉丝数
-        total_exposure_count: 0, // 总曝光量
+        total_show_count: 0, // 总曝光量
         total_news_count: 0, // 总文章数
         yesterday_visitor_count: 0,
         yesterday_fans_count: 0,
@@ -154,29 +188,32 @@ export default {
     this.init();
   },
   methods: {
-    init: function init() {
+    init() {
       console.log('articels page init');
       this.getRemoteAnalysisData();
     },
-    chooseRange: function chooseRange() {
+    chooseRange() {
       this.queryParam.days = '';
       if (this.dateRange && this.dateRange.length > 0) {
         this.queryParam.start_date = Tools.msToDate(this.dateRange[0], 'yyyy-MM-dd');
         this.queryParam.end_date = Tools.msToDate(this.dateRange[1], 'yyyy-MM-dd');
-        if (this.dateRange[1] - this.dateRange[0] > 31 * 24 * 60 * 60 * 1000) {
-          this.$message.error('所选范围不能超过31天, 请重新选择！');
+        if (this.dateRange[1] - this.dateRange[0] > 360 * 24 * 60 * 60 * 1000) {
+          this.$message.error('所选范围不能超过360天, 请重新选择！');
           return;
         }
         this.getRemoteAnalysisData();
       }
     },
-    chooseDay: function chooseDay(days) {
+    chooseDay(days) {
       this.queryParam.days = days;
       this.getRemoteAnalysisData();
     },
-    getRemoteAnalysisData: function getRemoteAnalysisData() {
+    getRemoteAnalysisData() {
+      this.loading = true;
       API.fetchAnalysisByAction(this.queryParam).then(result => {
         // fetchAnalysisByAction
+        console.log('Articles json: ', JSON.stringify(result, null, 2));
+        this.loading = false;
         if (!result.list || result.list.length < 1) {
           this.$message.error('数据统计：分析数据出错');
           console.error('数据统计：分析数据出错');
@@ -195,7 +232,9 @@ export default {
         }
         this.echartConfig.xAxis.data = this.artclesData.list.stats_date;
       }, err => {
+        this.loading = false;
         console.log(err);
+        this.$message.error(err);
       });
     }
   }

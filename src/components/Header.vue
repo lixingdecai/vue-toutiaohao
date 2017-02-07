@@ -1,60 +1,63 @@
 <template lang="html">
   <header class="header">
-     <el-popover popper-class="header-notity-pop"
-      ref="popover4"
-      placement="bottom"
-      width="120"
-      trigger="hover">
-      <ul class="header-notify-list">
-        <li>
-          <router-link to="/home/news?tab=1" class="link">
-            通知
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/home/comments" class="link">
-            评论
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/home/news?tab=2" class="link">
-            关注
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/home/news?tab=3" class="link">
-            收藏
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/home/news?tab=4" class="link">
-            转发
-          </router-link>
-        </li>
-      </ul>
-    </el-popover>
-
     <div class="header-content clearfix">
-      <div class="header-left">
+      <!-- <div class="header-left">
         <router-link class="link" to="/login">
-          <img src="../assets/images/logo.png" class="header-logo" alt="美柚">
+          <img src="http://oi2p38ffx.bkt.clouddn.com/avatar_blog1.png" class="header-logo" alt="李姓的菜">
         </router-link>
-        <span class="header-slogan">美柚号·做更懂女人的自媒体</span>
-        <a href="" target="_blank"><span class="header-account-status">审核中</span></a>
+        <span class="header-slogan">李姓的菜</span>
+        <span v-if="headType === 'loginStatus' && +user.status > 1" class="header-account-status">{{ +user.status | status2str }}</span>
       </div>
+      <div v-if="headType === 'nologin'" class="header-right header-unlogin">
+        <a href="javascript:;" target="_blank" id="J_register"><el-button type="text">立即注册</el-button></a>
+        <span class="header-line">|</span>
+        <a href="javascript:;" target="_blank" id="J_login"><el-button type="text">登录</el-button></a>
+      </div> -->
       <div class="header-right">
         <div class="header-userhead">
-          <img src="//sc.seeyouyima.com/forum/data/5823cd3f32c93_548_291.png?imageView2/2/w/750/h/500"/>
+          <img src="http://oi2p38ffx.bkt.clouddn.com/avatar_blog1.png" @error="imageLoadOnError" id="avatar" alt="头像" />
         </div>
         <div class="header-userinfo">
           <div class="header-usertype">个人</div>
-          <div class="header-username">第四叶</div>
+          <div class="header-username">李姓的菜</div>
         </div>
         <div class="header-user-oper">
-          <div class="header-usernotify"  v-popover:popover4>
-            <div class="header-notify-num">1</div>
+          <el-popover popper-class="header-notity-pop"
+            ref="popover4"
+            placement="bottom"
+            width="120"
+            trigger="hover">
+            <ul class="header-notify-list">
+              <li @click="closeNotify('system')">
+                <router-link to="/home/news?tab=1" class="link">
+                  通知<div v-if="+msg.system" class="header-notify header-notify-nums">{{ +msg.system > 99 ? '99+' : msg.system }}</div>
+                </router-link>
+              </li>
+              <li @click="closeNotify('comment')">
+                <router-link to="/home/comments" class="link">
+                  评论<div v-if="+msg.comment" class="header-notify header-notify-nums">{{ +msg.comment > 99 ? '99+' : msg.comment }}</div>
+                </router-link>
+              </li>
+              <li @click="closeNotify('follow')">
+                <router-link to="/home/news?tab=2" class="link">
+                  关注<div v-if="+msg.follow" class="header-notify header-notify-nums">{{ +msg.follow > 99 ? '99+' : msg.follow }}</div>
+                </router-link>
+              </li>
+              <li @click="closeNotify('favour')">
+                <router-link to="/home/news?tab=3" class="link">
+                  收藏<div v-if="+msg.favour" class="header-notify header-notify-nums">{{ +msg.favour > 99 ? '99+' : msg.favour }}</div>
+                </router-link>
+              </li>
+              <li @click="closeNotify('repeat')">
+                <router-link to="/home/news?tab=4" class="link">
+                  转发<div v-if="+msg.repeat" class="header-notify header-notify-nums">{{ +msg.repeat > 99 ? '99+' : msg.repeat }}</div>
+                </router-link>
+              </li>
+            </ul>
+          </el-popover>
+          <div class="header-usernotify" v-popover:popover4>
+            <div v-if="total" class="header-notify header-notify-num">{{ total }}</div>
           </div>
-
           <div class="header-split-border">
           </div>
           <div class="header-userlgout" @click="logout">
@@ -67,69 +70,81 @@
 </template>
 
 <script>
-import {
-  mapGetters
-} from 'vuex';
-import API from '../service';
-// import _ from '../util/tools';
+// import {
+//   mapGetters
+// } from 'vuex';
+
+// import API from '../service';
+import _ from '../util/tools';
 
 export default {
   name: 'header',
   data() {
     return {
-      message: {}
+      msg: {}
     };
   },
-  computed: mapGetters({
-    user: 'getUserInfo'
-  }),
-  watch: {
-    '$route'() {
-      if (this.user.sign) {
-        this.fetchMessage();
-        this.fetchUserInfo();
-      }
-    },
-    'user'() {
-      if (this.user.sign) {
-        this.fetchMessage();
-        this.fetchUserInfo();
+  computed: Object.assign({},
+    // mapGetters({
+    //   headType: 'getHeadType',
+    //   user: 'getUserInfo'
+    // }),
+    {
+      total() {
+        const msg = this.msg;
+        return parseInt(msg.system, 10)
+          + parseInt(msg.comment, 10)
+          + parseInt(msg.follow, 10)
+          + parseInt(msg.repeat, 10)
+          + parseInt(msg.favour, 10);
       }
     }
+  ),
+  watch: {
+    // '$route'() {
+    //   console.log('路由变化，获取消息信息');
+    //   if (this.user.isLogin) {
+    //     this.fetchMessage();
+    //   }
+    // }
+  },
+  mounted() {
+    this.fetchMessage();
   },
   methods: {
-    fetchMessage() {
-      const self = this;
-      API.fetchUnreadInfo().then(json => {
-        console.log('unread json: ', JSON.stringify(json, null, 2));
-        if (json && json.code === 0) {
-          self.message = json.data;
-        }
-      });
+    imageLoadOnError() {
+      this.user.avatar = _.getAvatar();
     },
-    fetchUserInfo() {
-      const self = this;
-      API.fetchUserInfo().then(json => {
-        console.log('user json: ', JSON.stringify(json, null, 2));
-        if (json && json.code === 0) {
-          self.user = json.data;
-        }
-      });
+    fetchMessage() {
+      // const self = this;
+      // API.fetchUserInfo().then(json => {
+      //   console.log('unread json: ', JSON.stringify(json, null, 2));
+      //   if (json && json.code === 0) {
+      //     self.msg = json.data.message;
+      //     _.setUserInfo(json.data.user);
+      //     self.$store.commit('setUserInfo');
+      //   }
+      // });
     },
     logout() {
-      // API.helloServiceExit().then(jsonp => {
-      //   const arr = [];
-      //   for (const index in jsonp) {
-      //     console.log(index, jsonp[index]);
-      //     arr.push(API.helloJsonp(jsonp[index]));
+      // API.ssoExit(this);
+    },
+    closeNotify(type) {
+      // const self = this;
+      console.log('type: ', type);
+      // API.resetUnreadInfo(type).then(json => {
+      //   console.log('unread info json: ', JSON.stringify(json, null, 2));
+      //   if (json && json.code === 0) {
+      //     self.msg[type] = 0;
+      //   } else {
+      //     self.$message({
+      //       showClose: true,
+      //       duration: 2000,
+      //       message: json.message,
+      //       type: 'error'
+      //     });
+      //     console.error(json.message);
       //   }
-      //   console.log('arr: ', arr);
-      //   Promise.all(arr).then(result => {
-      //     console.log('result: ', result);
-      //     window.location.href = _.getLoginAddr();
-      //   }, () => {
-      //     window.location.href = _.getLoginAddr();
-      //   });
       // });
     }
   }
@@ -203,9 +218,12 @@ $header-height: 67px;
   color: #b5b5b5;
   .link {
     color: $color-blue;
-
     font-size: 14px;
   }
+}
+
+.header-unlogin {
+  line-height: $header-height;
 }
 
 .header-userhead {
@@ -232,6 +250,7 @@ $header-height: 67px;
   border: 0 solid #FFA7D3;
   border-radius: 20px;
   text-align: center;
+  width: 60px;
 }
 
 .header-username {
@@ -256,18 +275,26 @@ $header-height: 67px;
   position: relative;
 }
 
-.header-notify-num {
-  width: 18px;
+.header-notify {
+  position: absolute;
   height: 18px;
-  border-radius: 100%;
+  line-height: 18px;
+  padding: 0 6px;
+  border-radius: 10px;
   color: #fff;
   background: #FF4949;
   text-align: center;
   font-size: 12px;
-  line-height: 18px;
-  position: absolute;
-  right: -9px;
+}
+
+.header-notify-num {
+  left: 15px;
   top: -9px;
+}
+
+.header-notify-nums {
+  right: 14px;
+  top: 9px;
 }
 
 .header-split-border {
@@ -288,6 +315,10 @@ $header-height: 67px;
   margin-left: 20px;
 }
 
+.header-notity-pop {
+  z-index: 11111 !important;
+}
+
 .header-notity-pop.el-popover {
   padding: 0;
 }
@@ -297,6 +328,7 @@ $header-height: 67px;
 }
 
 .header-notify-list li {
+  position: relative;
   height: 36px;
   line-height: 36px;
   cursor: pointer;
