@@ -21,7 +21,7 @@ filters对象格式：
 </template>
 
 <script>
-// import Base64 from '../../static/pupload/base64';
+import Base64 from '../../static/pupload/base64';
 import '../../static/pupload/crypto1/crypto/crypto';
 import '../../static/pupload/crypto1/hmac/hmac';
 import '../../static/pupload/crypto1/sha1/sha1';
@@ -39,6 +39,7 @@ export default {
       accesskey: '',
       token: '',
       host: '',
+      userID: '',
       gDirname: 'www.mp.meiyou.com/',
       gObjectName: '',
       policyText: '',
@@ -49,6 +50,10 @@ export default {
     };
   },
   props: {
+    isAvatar: {
+      type: Boolean,
+      default: false
+    },
     fileId: '',
     beforeUpload: Function,
     onSuccess: Function,
@@ -58,8 +63,8 @@ export default {
       type: Object,
       default() {
         return {
-          ext: 'jpg,gif,png,bmp',
-          max_file_size: '10mb'
+          ext: 'jpg,gif,jpeg,png,bmp',
+          max_file_size: '5mb'
         };
       }
     }
@@ -74,6 +79,26 @@ export default {
   },
   methods: {
     initDataAndUpload() {
+      this.accessid = 'LTAIOa3pfAqDh3UP';
+      this.accesskey = '5GbDstnwPucCJqAKaC9OzWRUm1aySY';
+      // this.token = data.SecurityToken;
+      this.host = 'https://lixingdecai.oss-cn-shanghai.aliyuncs.com/';
+      // this.userID = data.userID;
+      this.policyText = {
+        // 设置该Policy的失效时间，超过这个失效时间之后，就没有办法通过这个policy上传文件了
+        expiration: '2020-01-01T12:00:00.000Z',
+        // 设置上传文件的大小限制
+        conditions: [
+          ['content-length-range', 0, 104857600000]
+        ]
+      };
+      this.policyBase64 = Base64.encode(JSON.stringify(this.policyText));
+      this.message = this.policyBase64;
+      this.bytes = Crypto.hmac(Crypto.SHA1, this.message, this.accesskey, {
+        asBytes: true
+      });
+      this.signature = Crypto.util.bytesToBase64(this.bytes);
+      this.upload();
       // API.fetchUploadtoken().then(json => {
       //   if (json && json.code === 0) {
       //     const data = json.data;
@@ -81,6 +106,7 @@ export default {
       //     this.accesskey = data.AccessKeySecret;
       //     this.token = data.SecurityToken;
       //     this.host = data.imageHost;
+      //     this.userID = data.userID;
       //     this.policyText = {
       //       // 设置该Policy的失效时间，超过这个失效时间之后，就没有办法通过这个policy上传文件了
       //       expiration: data.Expiration,
@@ -118,7 +144,11 @@ export default {
     calculateObjectName(filename) {
       this.gObjectName += `${filename}`;
       const suffix = this.getSuffix(filename);
-      this.gObjectName = this.gDirname + this.guid() + suffix;
+      if (this.isAvatar) {
+        this.gObjectName = this.gDirname + 'avatar_' + this.userID + '_' + this.guid() + suffix;
+      } else {
+        this.gObjectName = this.gDirname + this.guid() + suffix;
+      }
       return '';
     },
     getUploadedObjectName(filename) {
@@ -138,7 +168,7 @@ export default {
         // 让服务端返回200,不然，默认会返回204
         success_action_status: '200',
         signature: this.signature,
-        'x-oss-security-token': this.token
+        // 'x-oss-security-token': this.token
       };
       up.setOption({
         multipart_params: newMultipartParams
@@ -162,7 +192,7 @@ export default {
             extensions: this.filters.ext
           }],
           // 最大只能上传100kb的文件
-          max_file_size: this.filters.max_file_size,
+          max_file_size: this.filters.max_file_size.toLowerCase(),
           // 不允许队列中存在重复文件
           // prevent_duplicates: true
         },
