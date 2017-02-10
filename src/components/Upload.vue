@@ -99,6 +99,11 @@ export default {
       });
       this.signature = Crypto.util.bytesToBase64(this.bytes);
       this.upload();
+      /**
+       * 异步获取 OSS 子关联账号设置
+       * 动态获取id 和 KEY
+       * 更安全
+       */
       // API.fetchUploadtoken().then(json => {
       //   if (json && json.code === 0) {
       //     const data = json.data;
