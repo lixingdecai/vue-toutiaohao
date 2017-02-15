@@ -1,5 +1,8 @@
 # vue-ueditor
 
+`在线演示demo http://tth.lixingdecai.com`
+`文档不全，正在努力跟进，有问题直接提issues 给我`
+
 > A Vue.js project
 
 ## Build Setup
