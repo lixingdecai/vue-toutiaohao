@@ -7,26 +7,27 @@
       <div class="fans-content">
         <div class="fans-date">
           <el-date-picker
+            @change="handleChange"
             v-model="fansDate"
             type="daterange"
             :picker-options="forbiddenFuture"
             placeholder="选择日期范围"
             class="users-picker">
           </el-date-picker>
-          <el-button @click="chooseRange" type="default" icon="search" class="logs-date__btn"></el-button>
+          <el-button @click="fetchFans(1)" type="default" icon="search" class="logs-date__btn"></el-button>
         </div>
         <div class="fans-table" v-loading="loading" element-loading-text="拼命加载中">
-          <div class="index-table__head">
+          <div class="index-table__head fans-table__head">
             <span>粉丝列表</span>
           </div>
-          <ul v-if="fansData && fansData.length != 0">
+          <ul v-if="fansData && fansData.length != 0" class="fans-table__body">
             <li v-for="(item, index) in fansData" class="index-table__item fans-table__item clearfix">
               <div class="fans-item__avatar">
                 <img :src="item.avatar | https" @error="imageLoadOnError($event)" alt="avatar">
               </div>
               <div class="fans-item__info">
                 <div class="fans-item__top">
-                  <span class="fans-item__name">{{ item.screen_name || ''}}</span>
+                  <span class="fans-item__name">{{ item.screen_name || item.id || ''}}</span>
                   <span class="fans-item__type">{{ item.mode | num2mode}}</span>
                 </div>
                 <div class="fans-item__bottom"><span class="fans-item__date">{{ item.created_at | formatDate('yyyy-MM-dd') }}</span> 关注</div>
@@ -35,16 +36,16 @@
                 {{ item.location }}
               </div>
               <div class="fans-item__right">
-                <el-button v-if="item.relation === 1" type="plain" @click="fixRelation(index, 'cancel_follows', item.id, item.screen_name)" class="fans-item__relation is-focus">已关注</el-button>
-                <el-button v-else type="primary" @click="fixRelation(index, 'add_follows', item.id, item.screen_name)" class="fans-item__relation">加关注</el-button>
+                <el-button v-if="item.relation === 4" type="text" @click="fixRelation(index, 'cancel_follows', item.id, item.screen_name)" class="fans-item__relation is-focus">已关注</el-button>
+                <el-button v-else-if="item.relation === 2" type="plain" @click="fixRelation(index, 'add_follows', item.id, item.screen_name)" class="fans-item__relation is-nofocus"><i class="iconfont icon-add-icon"></i>&nbsp;关注</el-button>
               </div>
               <div class="fans-item__right">
-                <el-button type="text" @click="handlerUnfrened(index, item.id, item.screen_name)" class="fans-item__relation">加入黑名单</el-button>
+                <el-button type="text" @click="handlerUnfrened(index, item.id, item.screen_name)" class="fans-item__relation is-black">加入黑名单</el-button>
               </div>
             </li>
           </ul>
           <div v-else class="fans-footer">
-            没有更多数据
+            暂时没有数据哦~
           </div>
         </div>
         <div class="index-pagination" v-if="pageInfo && pageInfo.total_number && pageInfo.total_number > 0">
@@ -64,6 +65,7 @@
 <script>
 import API from '../../service';
 import _ from '../../util/tools';
+import Filter from '../../filters';
 
 export default {
   name: 'home-fans',
@@ -111,37 +113,56 @@ export default {
     };
   },
   mounted() {
-    this.fetchFans();
+    this.fetchFans(1);
   },
   methods: {
     imageLoadOnError(event) {
       event.currentTarget.setAttribute('src', _.getAvatar());
     },
-    chooseRange: function chooseRange() {
-      if (this.fansDate && this.fansDate.length > 0) {
-        if (this.fansDate[0] && this.fansDate[1]) {
-          this.fansDate.start_date = _.msToDate(this.fansDate[0], 'yyyy-MM-dd');
-          this.fansDate.end_date = _.msToDate(this.fansDate[1], 'yyyy-MM-dd');
-        }
+    handleChange(val) {
+      if (!val) {
+        this.fansDate = [];
+        return;
       }
-      this.fetchFans();
+      console.log(val);
+      this.fansDate = val.trim().split(' - ');
     },
-    fetchFans() {
+    fetchFans(page) {
       const self = this;
+      const date = self.fansDate;
+      let start = '';
+      let end = '';
+      console.log('date: ', date);
+      if (!date.length || date.length < 2) {
+        start = '';
+        end = '';
+      } else {
+        start = Filter.formatDate(date[0], 'yyyy-MM-dd');
+        end = Filter.formatDate(date[1], 'yyyy-MM-dd');
+      }
+      console.log('start: ', start, ' end: ', end);
       self.loading = true;
-      API.fetchFriendshipList(self.pageInfo.page, self.fansDate.start_date, self.fansDate.end_date).then(json => {
+      API.fetchFriendshipList(page, start, end).then(json => {
         console.log('fans json: ', JSON.stringify(json, null, 2));
         self.loading = false;
         if (json && json.code === 0) {
           const data = json.data;
           self.fansData = data.data;
           self.pageInfo = data.page_info;
+        } else {
+          self.$message({
+            showClose: true,
+            message: json.message,
+            type: 'error'
+          });
         }
       });
     },
     handleCurrentChange(val) {
       this.currentPage = val;
       console.log(`当前页: ${val}`);
+      _.toTop();
+      this.fetchFans(val);
     },
     handlerUnfrened(index, id, name) {
       const self = this;
@@ -163,9 +184,9 @@ export default {
         self.loadingSubmit = false;
         if (json && json.code === 0) {
           if (action === 'add_follows') {
-            self.fansData[index].relation = 1;
+            self.fansData[index].relation = 4;
           } else if (action === 'cancel_follows') {
-            self.fansData[index].relation = 0;
+            self.fansData[index].relation = 2;
           } else if (action === 'add_blacklist') {
             self.fansData.splice(index, 1);
           }
@@ -189,12 +210,17 @@ export default {
 
 .fans-table {
   margin-top: 40px;
-  border-left: 1px solid #e7e7e7;
-  border-right: 1px solid #e7e7e7;
 }
 
 .index-table__item.fans-table__item {
   height: 72px;
+}
+
+.fans-table__head,
+.fans-table__body,
+.fans-footer {
+  border-left: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
 }
 
 .fans-item__avatar {
@@ -224,6 +250,8 @@ export default {
 }
 
 .fans-item__name {
+  display: inline-block;
+  width: 200px;
   margin-right: 10px;
 }
 
@@ -253,12 +281,28 @@ export default {
   cursor: pointer;
 }
 
-.fans-item__relation.is-focus {
-  color: #65abec;
+.fans-item__relation.is-nofocus {
+  color: #ff74b9;
+  border-color: #ff74b9;
+  &:hover {
+    color: #fff;
+    background-color: #ff74b9;
+  }
+  &:active {
+    color: darken(#fff, 10%);
+    background-color: darken(#ff74b9, 10%);
+  }
 }
 
+.fans-item__relation.is-focus,
 .fans-item__relation.is-black {
-  color: #65abec;
+  color: #999;
+  &:hover {
+    color: darken(#999, 20%);
+  }
+  &:active {
+    color: darken(#999, 40%);
+  }
 }
 
 .fans-footer {

@@ -93,7 +93,7 @@ export default {
         series: [{
           name: '新增用户',
           type: 'line',
-          k: 'fans_count',
+          k: 'visitor_count',
           smooth: true,
           barWidth: '10%',
           data: []
@@ -101,17 +101,17 @@ export default {
           name: '新增粉丝',
           type: 'line',
           barWidth: '10%',
-          k: 'visitor_count',
+          k: 'fans_count',
           smooth: true,
           data: []
         }],
         color: ['#FF74B9', '#13CE66'],
         animationDuration: 2000
       },
-      dateRange: '',
+      dateRange: [new Date(Date.now() - 3600 * 1000 * 24 * 1), new Date(Date.now() - 3600 * 1000 * 24 * 1)],
       forbiddenFuture: {
         disabledDate(time) {
-          return time.getTime() > Date.now();
+          return time.getTime() > Date.now() - 3600 * 1000 * 24 * 1;
         },
         shortcuts: [{
           text: '最近一周',

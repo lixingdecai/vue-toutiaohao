@@ -11,42 +11,42 @@
           <div class="public-aticle-box">
             <div>
               <input class="title-input" placeholder="标题(5-30字)" v-model="publishModal.title">
-              <span class="title_tip">{{publishModal.title.length}}/30</span>
+              <span class="title_tip"><span v-bind:class="[publishModal.title.length > 30 ? 'title-tip-err' : '']">{{publishModal.title.length}}</span>/30</span>
             </div>
             <div class="publish-toolbar" id="publishToolbar">
               <el-tooltip content="H1标题" placement="top" effect="light" v-bind:class="[toolStates.Paragraph == 1 ? 'tool-bar-selected' : '', toolStates.Paragraph == -1 ? 'tool-bar-disabled' : '' ]">
-                <div v-if="toolStates.Paragraph === 1" class="public-icon toolbar-h" v-on:click="ueDisParagraph()">
+                <div v-if="toolStates.Paragraph === 1" class="public-icon toolbar-h icon-toolbar-h" v-on:click="ueDisParagraph()">
                 </div>
-                <div v-else class="public-icon toolbar-h" v-on:click="ueParagraph()">
+                <div v-else class="public-icon toolbar-h icon-toolbar-h" v-on:click="ueParagraph()">
                 </div>
               </el-tooltip>
               <el-tooltip content="加粗" placement="top" effect="light" v-bind:class="[toolStates.bold == 1 ? 'tool-bar-selected' : '', toolStates.bold == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-b" v-on:click="execCommand('bold')">
+                <div class="public-icon toolbar-b icon-toolbar-b" v-on:click="execCommand('bold')">
                 </div>
               </el-tooltip>
               <el-tooltip content="无序列表" placement="top" effect="light" v-bind:class="[toolStates.insertunorderedlist == 1 ? 'tool-bar-selected' : '', toolStates.insertunorderedlist == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-order" v-on:click="insertunorderedlist()">
+                <div class="public-icon toolbar-order icon-toolbar-order" v-on:click="insertunorderedlist()">
                 </div>
               </el-tooltip>
               <el-tooltip content="有序列表" placement="top" effect="light" v-bind:class="[toolStates.insertorderedlist == 1 ? 'tool-bar-selected' : '', toolStates.insertorderedlist == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-unorder" v-on:click="insertorderedlist()">
+                <div class="public-icon toolbar-unorder icon-toolbar-unorder" v-on:click="insertorderedlist()">
                 </div>
               </el-tooltip>
               <div class="public-separator"></div>
-              <el-tooltip content="图片" placement="top" effect="light" v-bind:class="[toolStates.insertImage == 1 ? 'tool-bar-selected' : '', toolStates.insertImage == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-pic" @click="ueInsertImage()">
+              <el-tooltip content="插入图片" placement="top" effect="light" v-bind:class="[toolStates.insertImage == 1 ? 'tool-bar-selected' : '', toolStates.insertImage == -1 ? 'tool-bar-disabled' : '' ]">
+                <div class="public-icon toolbar-pic icon-toolbar-pic" @click="ueInsertImage()">
                 </div>
               </el-tooltip>
-              <el-tooltip content="视频" placement="top" effect="light" v-bind:class="[toolStates.insertvideo == 1 ? 'tool-bar-selected' : '', toolStates.insertvideo == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-video" @click="ueUploadVideo()">
+              <el-tooltip content="插入视频" placement="top" effect="light" v-bind:class="[toolStates.insertvideo == 1 ? 'tool-bar-selected' : '', toolStates.insertvideo == -1 ? 'tool-bar-disabled' : '' ]">
+                <div class="public-icon toolbar-video icon-toolbar-video" @click="ueUploadVideo()">
                 </div>
               </el-tooltip>
               <el-tooltip content="撤销" placement="top" effect="light" v-bind:class="[toolStates.undo == 1 ? 'tool-bar-selected' : '', toolStates.undo == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-undo" @click="execCommand('undo')">
+                <div class="public-icon toolbar-undo icon-toolbar-back" @click="execCommand('undo')">
                 </div>
               </el-tooltip>
               <el-tooltip content="重做" placement="top" effect="light" v-bind:class="[toolStates.redo == 1 ? 'tool-bar-selected' : '', toolStates.redo == -1 ? 'tool-bar-disabled' : '' ]">
-                <div class="public-icon toolbar-redo" @click="execCommand('redo')">
+                <div class="public-icon toolbar-redo icon-toolbar-back" @click="execCommand('redo')">
                 </div>
               </el-tooltip>
               <div class="is-saved">
@@ -61,12 +61,12 @@
             <div ref="editor">
             </div>
           </div>
-          <el-form-item label="视频上传" v-if="uploadFile.name">
+          <el-form-item class="video-upload-box" v-if="uploadFile.name">
             <div id="video-uploaded" class="video-uploaded" v-if="uploadFile.percent == 100">
               <div class="video-modify-poster" @click="settingVideoCover=true">设置视频封面</div>
               <div class="video-feedback">
                 <div id="video-feedback-status" class="video-feedback-status">
-                  <a class="video-success" href="http://i.snssdk.com/video/playcode/1/toutiao/e08af26b575c4380abe2760b76c57793" target="_blank" v-bind:style="uploadVideoCorverStyle">
+                  <a class="video-success" :href="publishModal.multi_video[0].url " target="_blank" :style="'background-image:url(' + publishModal.multi_video[0].thumb + ')'">
                     <i></i>
                     <!-- <img src="http://p.pstatp.com/large/9820/3808334921" width="100%" height="100%"> -->
                   </a>
@@ -83,7 +83,7 @@
                     </div>
                   </div>
                 </div>
-                <el-button class="new-btn cancel video-feedback-btn" id="video-feedback-btn" @click="usInsertMVideo()">添加到正文</el-button>
+                <el-button type="primary" class="new-btn cancel video-feedback-btn" id="video-feedback-btn" @click="usInsertMVideo()">添加到正文</el-button>
               </div>
             </div>
             <div v-if="uploadFile.percent != 100" class="video-progress-box">
@@ -106,7 +106,7 @@
               <el-radio label="" :label="3">三图模式(仅在wifi环境下显示)</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item class="front-cover-box simple-modal" v-show="coverStyle==1">
+          <el-form-item class="front-cover-box simple-modal" v-show="coverStyle==1 && !uploadFile.name">
             <div class="front-cover-main">
               <i class="front-cover-cur"></i>
               <div class="front-cover-upload">
@@ -122,7 +122,7 @@
               <div class="front-cover-tip">所使用的封面图片均需来自于正文，如文章中含视频请使用自动模式。</div>
             </div>
           </el-form-item>
-          <el-form-item class="front-cover-box three-modal" v-show="coverStyle==3">
+          <el-form-item class="front-cover-box three-modal" v-show="coverStyle==3 && !uploadFile.name">
             <div class="front-cover-main">
               <i class="front-cover-cur"></i>
               <div class="front-cover-upload">
@@ -163,7 +163,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="publishArt()">发表</el-button>
-            <el-button @click="saveDraft()">存草稿</el-button>
+            <el-button v-if="publishModal.status === 0 || publishModal.status === 8" @click="saveDraft()">存草稿</el-button>
             <el-button @click="preViewClick()">客户端预览</el-button>
             <el-button @click="cancel()">取消</el-button>
           </el-form-item>
@@ -220,10 +220,10 @@
       <div class="video-picker">
         <div>
           <i></i>
-          <upload :onSuccess="onVideoUploadSuccess" :onProgress="onVideoProgress" :filters="videoFilters">
+          <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onProgress="onVideoProgress" :filters="videoFilters" :onError="onError">
             <el-button type="primary">点击选择视频</el-button>
           </upload>
-          <span>支持MP4格式的视频，大小不超过2G，较大的视频请压缩上传</span>
+          <span>支持MP4格式的视频，大小不超过1000MB，较大的视频请压缩上传</span>
         </div>
       </div>
     </div>
@@ -251,7 +251,7 @@
     <span>是否确认重新上传视频</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="reUploadDialogVisible = false">取 消</el-button>
-      <upload :onSuccess="onVideoUploadSuccess" :onProgress="onVideoProgress" :filters="videoFilters">
+      <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onProgress="onVideoProgress" :filters="videoFilters" :onError="onError">
         <el-button type="primary" @click="reUploadDialogVisible = false">确 定</el-button>
       </upload>
     </span>
@@ -291,6 +291,7 @@ import $ from 'jquery';
 import crop from '../../components/Crop';
 import Config from '../../../config';
 import Tool from '../../util/tools';
+import { Message } from 'element-ui';
 
 
 export default {
@@ -309,11 +310,13 @@ export default {
       videoCoverCrop: false,
       // pubulishCoverSettingShow: true, // 封面栏显示 隐藏
       storageKey: 'publishModal',
+      suffix: '?imageView2/2/w/750',
       id: Math.random(10) + 'ueditorId',
       coverStyle: 0, // 封面
       aspectRatio: 3 / 2,
       reUploadDialogVisible: false, // 重新上传
       restoreAlert: false,
+      haveUploadVideo: false,
       fullscreenLoading: false,
       firstImageUpload: true,
       contentChangeSave: true,
@@ -384,7 +387,7 @@ export default {
           url: '',
           remark: '',
         }],
-        status: 1,
+        status: 0,
         video: [],
         is_timeline: 0,
       },
@@ -436,6 +439,11 @@ export default {
       //};
     }
   },
+  // beforeRouteEnter(to, from, next) {
+  //   const status = Tool.getUserStatus();
+  //   console.log('status: ', status);
+  //   Tool.statusWarning(status, Message, next, 'publish');
+  // },
   mounted() {
     this.$nextTick(function f1() {
       // 保证 this.$el 已经插入文档
@@ -515,6 +523,9 @@ export default {
   },
   methods: {
     cropImg(imgUrl) {
+      if (imgUrl.indexOf(this.suffix) > 0) {
+        imgUrl = imgUrl.substring(0, imgUrl.indexOf(this.suffix));
+      }
       this.crop = !this.crop;
       this.imgUrl = imgUrl;
     },
@@ -576,6 +587,9 @@ export default {
           } else {
             this.publishModal = result.data;
           }
+          if (!this.publishModal.multi_video || this.publishModal.multi_video.length === 0) {
+            Object.assign(this.publishModal.multi_video, this.$options.data().publishModal.multi_video);
+          }
           // if (this.publishModal.thumbs.length !== 3 && this.publishModal.thumbs.length !== 1) {
           //   Object.assign(this.publishModal.thumbs, this.$options.data().publishModal.thumbs);
           // }
@@ -595,19 +609,14 @@ export default {
         if (pm) {
           const pmJson = JSON.parse(pm);
           Object.assign(this.publishModal, pmJson);
+          console.log('local123:', this.publishModal);
           if (this.publishModal.content) {
             this.editor.setContent(this.publishModal.content);
           }
-          // if (this.publishModal.thumbs.length !== 3 && this.publishModal.thumbs.length !== 1) {
-          //   Object.assign(this.publishModal.thumbs, this.$options.data().publishModal.thumbs);
-          // }
-          // self.uploadFile.name = self.publishModal.multi_video[0].name;
-          // self.uploadFile.url = self.publishModal.multi_video[0].url;
-          // self.uploadFile.src = self.publishModal.multi_video[0].src;
-          // self.uploadFile.percent = 100;
+
           this.initThumbs();
           this.contentListen();
-          console.log('local:', self.uploadFile);
+          console.log('local2:', this.publishModal);
           this.restoreAlert = true;
           setTimeout(function () {
             self.restoreAlert = false;
@@ -620,9 +629,9 @@ export default {
         this.publishModal.action = 'add';
       }
       this.publishModal.is_timeline = 0;
-      if (this.publishModal.multi_video.lenght !== 1) {
-        Object.assign(this.publishModal.multi_video, this.$options.data().publishModal.multi_video);
-      }
+      // if (this.publishModal.multi_video.length !== 1) {
+      //   Object.assign(this.publishModal.multi_video, this.$options.data().publishModal.multi_video);
+      // }
       this.autoSaveInterval = setInterval(function () {
         self.autoSaveContent();
       }, 5000);
@@ -651,12 +660,17 @@ export default {
     },
     autoSaveContent() {
       const self = this;
+      // console.log('---- setInterval 1 ----', localStorage.getItem(self.storageKey));
       if (this.isAutoSaved && this.publishModal.content) {
         // console.log('---- autoSaveContent ----', this.publishModal);
         // self.contentChangeSave = false;
-        const pms = JSON.stringify(this.publishModal)
+        let pm = {};
+        Object.assign(pm, this.publishModal);
+        pm.status = 0;
+        const pms = JSON.stringify(pm);
         this.isAutoSaved = false;
         setTimeout(function () {
+          // console.log('---- setInterval 2----', localStorage.getItem(self.storageKey));
           localStorage.setItem(self.storageKey, pms);
           self.isAutoSaved = true;
         }, 1000);
@@ -685,26 +699,36 @@ export default {
         self.publishModal.images.push(img);
       });
 
-      $(videoDom).each(function () {
-        // console.log($(this).attr('data-src'));
-        // img.src = $(this).attr('data-src');
-        self.uploadFile.name = $(this).attr('data-name');
-        self.uploadFile.url = $(this).attr('data-src');
-        self.uploadFile.src = $(this).attr('data-src');
-        self.uploadFile.percent = 100;
-        console.log('---- init ----', self.publishModal);
-        self.publishModal.multi_video[0].url = $(this).attr('data-src');
-        self.publishModal.multi_video[0].src = $(this).attr('data-src');
-        self.publishModal.multi_video[0].name = $(this).attr('data-name');
-      });
-
-      // this.$message.error(aa.attr('data-src'));
-      // console.log(this.uploadFile.name);
+      if (videoDom && videoDom.length > 0){
+        $(videoDom).each(function () {
+          // console.log($(this).attr('data-src'));
+          // img.src = $(this).attr('data-src');
+          self.uploadFile.name = $(this).attr('data-name');
+          self.uploadFile.url = $(this).attr('data-src');
+          self.uploadFile.src = $(this).attr('data-src');
+          self.uploadFile.percent = 100;
+          console.log('---- init ----', self.publishModal, $(this).attr('data-src'), $(this).attr('data-name'));
+          self.publishModal.multi_video[0].url = $(this).attr('data-src');
+          self.publishModal.multi_video[0].src = $(this).attr('data-src');
+          self.publishModal.multi_video[0].name = $(this).attr('data-name');
+        });
+      } else {
+        if (self.publishModal.multi_video[0].url) {
+          this.uploadFile = {};
+          Object.assign(this.uploadFile, this.$options.data().uploadFile);
+        }
+        self.publishModal.multi_video[0].url = '';
+        self.publishModal.multi_video[0].src = '';
+        self.publishModal.multi_video[0].name = '';
+      }
     },
+    // 撤销草稿
     unRestore() {
       Object.assign(this.publishModal, this.$options.data().publishModal);
+      this.uploadFile = {};
       Object.assign(this.uploadFile, this.$options.data().uploadFile);
       this.editor.setContent(this.publishModal.content);
+      this.coverStyle = 0;
     },
     initData: function () {
       // this.publishModal =
@@ -791,7 +815,7 @@ export default {
     // 上传视频
     ueUploadVideo: function () {
       console.log(this.uploadFile, this.publishModal);
-      if (this.uploadFile.url) {
+      if (this.uploadFile.name) {
         this.$message.error('正文只能上传一个视频，要修改视频请删除或重新上传!');
         return;
       }
@@ -814,11 +838,12 @@ export default {
     preViewClick: function () {
       // this.editor.execCommand('preview')
       this.innerHTML = this.editor.getAllHtml();
-      console.log(this.innerHTML);
+      // console.log(this.innerHTML);
       this.publishPreviewDialog = true;
     },
     submitValidator() {
       console.log('submit: ', this.publishModal);
+      console.log(this.coverStyle);
       if (this.publishModal.title) {
         if (this.publishModal.title.length < 5) {
           this.$message.error('标题字数不能少于5个');
@@ -843,7 +868,7 @@ export default {
           }
         } else if (this.coverStyle === 3) {
           for (let i = 0; i < 3; i++) {
-            if (!this.publishModal.thumbs[i] || !this.publishModal.thumbs[0].src) {
+            if (!this.publishModal.thumbs[i] || !this.publishModal.thumbs[i].src) {
               this.$message.error('请完成封面设置');
               return false;
             }
@@ -860,27 +885,42 @@ export default {
         this.$message.error('请选择分类');
         return false;
       }
+      if (this.uploadFile.name && !this.uploadFile.url) {
+        this.$message.error('视频还在上传中，请先等视频上传完成，并添加到正文所需位置');
+        return false;
+      }
+      if (this.uploadFile.url && !this.publishModal.multi_video[0].url) {
+        this.$message.error('视频未添加到正文，请先将视频添加到正文所需位置');
+        return false;
+      }
+      if (this.publishModal.multi_video[0].thumb && !this.publishModal.multi_video[0].url) {
+        this.$message.error('视频未添加到正文，请先将视频添加到正文所需位置');
+        return false;
+      }
       return true;
     },
+    // 发表
     publishArt: function () {
-      this.publishModal.status = 1;
-      // this.publishModal.content = UE.utils.unhtml(this.publishModal.content);
       if (!this.submitValidator()) {
         return;
       }
       this.fullscreenLoading = true;
+      this.publishModal.status = 12;
       const pm = this.beforeCommit();
       API.saveUpdateArticle(pm).then(result => {
-        localStorage.removeItem(this.storageKey);
+        console.log('storageKey: ', this.storageKey);
+        clearInterval(this.autoSaveInterval);
         console.log('发表成功');
         this.fullscreenLoading = false;
-        localStorage.removeItem('publishModal');
         this.$message({
           message: '文章发表成功',
           type: 'success'
         });
-        console.log('--------------------------------', this.storageKey);
+        const self = this;
         this.$router.push('/home/manager');
+        setTimeout(function () {
+          localStorage.removeItem(self.storageKey);
+        }, 1000);
       }, err => {
         this.fullscreenLoading = false;
         this.$message.error('发表失败' + err.message);
@@ -909,7 +949,6 @@ export default {
       let pm = {};
       Object.assign(pm, this.publishModal);
       pm.thumbs = [];
-      console.log('--------', pm.thumbs);
       if (this.coverStyle === 1) {
         pm.thumbs.push(this.publishModal.thumbs[0]);
       } else if(this.coverStyle === 3) {
@@ -918,16 +957,20 @@ export default {
       pm.content = '<div>' + UE.utils.unhtml(this.publishModal.content) + '</div>';
       return pm;
     },
+    /**
+     * [存草稿]
+     * @return {[type]} [description]
+     */
     saveDraft: function () {
       if (!this.submitValidator()) {
         return;
       }
-      this.publishModal.status = 8;
       this.fullscreenLoading = true;
+      this.publishModal.status = 8;
       const pm = this.beforeCommit();
       // this.publishModal.content = encodeURI(this.publishModal.content);
       API.saveUpdateArticle(pm).then(result => {
-        localStorage.removeItem(this.storageKey);
+        clearInterval(this.autoSaveInterval);
         this.fullscreenLoading = false;
         console.log('保存草稿成功');
         this.$message({
@@ -935,6 +978,11 @@ export default {
           type: 'success'
         });
         this.$router.push('/home/manager');
+        const self = this;
+        this.$router.push('/home/manager');
+        setTimeout(function () {
+          localStorage.removeItem(self.storageKey);
+        }, 1000);
         console.log('保存草稿成功');
       }, err => {
         this.fullscreenLoading = false;
@@ -963,9 +1011,11 @@ export default {
       // console.log('删除了视频：', $('.video-image', h).html());
       // console.log('删除了视频：', $('.outHtml', h));
       this.editor.setContent(contentA);
+      this.uploadFile = {};
       Object.assign(this.uploadFile, this.$options.data().uploadFile);
       Object.assign(this.publishModal.multi_video, this.$options.data().publishModal.multi_video);
       this.firstImageUpload = true;
+      console.log(this.uploadFile);
       // // 显示封面
       // this.pubulishCoverSettingShow = true;
       // this.coverStyle = 0;
@@ -1004,8 +1054,8 @@ export default {
       this.firstImageUpload = false;
       console.log(url);
       const im = {};
-      im.src = file.files[0].name;
-      im.url = url;
+      im.src = file.files[0].name + this.suffix;
+      im.url = url + this.suffix;
       im.remark = '';
       this.uploadImageList.push(im);
       console.log('upload onSuccess');
@@ -1045,8 +1095,13 @@ export default {
       // // 隐藏封面
       // this.pubulishCoverSettingShow = false;
       // this.coverStyle = 0;
+    },
+    onVideoBeforeUpload(up, file) {
+      this.haveUploadVideo = true;
       this.dialogVideoVisible = false;
       this.uploadFile = file;
+      console.log('aaaaaaa', this.uploadFile);
+      this.up = up;
     },
     // 取消上传视频
     cancelUpload() {
@@ -1056,9 +1111,23 @@ export default {
         type: 'warning'
       }).then(() => {
         // this.pubulishCoverSettingShow = true;
+        // this.up.stop();
+        if (this.up) {
+          this.up.removeFile(this.uploadFile);
+        }
+        this.uploadFile = {};
         Object.assign(this.uploadFile, this.$options.data().uploadFile);
         Object.assign(this.publishModal.multi_video, this.$options.data().publishModal.multi_video);
       }).catch(() => {});
+    },
+    onError(msg, up, err) {
+      console.log('发表视频-视频上传失败：' + err);
+      if (this.up) {
+        this.up.removeFile(this.uploadFile);
+      }
+      this.uploadFile = {};
+      Object.assign(this.uploadFile, this.$options.data().uploadFile);
+      Object.assign(this.publishModal.multi_video, this.$options.data().publishModal.multi_video);
     },
     cancel() {
       this.$confirm('确认取消本次的发布，取消后编辑的内容将无法找回', '提示', {
@@ -1107,6 +1176,8 @@ export default {
   color: #ff74b9;
 }
 
+.publish-box #edui1_imagescale,.publish-box .edui-editor-imagescale{display:none !important;}
+
 .publish-box-wrap {
   position: relative;
 }
@@ -1152,6 +1223,11 @@ export default {
   font-size: 14px;
   color: #999999;
   letter-spacing: 0;
+}
+
+.title-tip-err {
+  color: #ff74b9;
+  font-weight: bold;
 }
 
 #editor {
@@ -1203,16 +1279,26 @@ export default {
   border-bottom: 1px solid #e9e9e9;
   border-radius: 0;
   box-shadow: none;
-  padding: 5px 10px 0;
+  padding: 5px 10px 5px 20px;
   z-index: 1000;
   width: 900px;
   /*position: absolute;*/
-  top: 58px;
+  /*top: 58px;*/
+}
+
+.publish-box .video-upload-box {
+  border: 1px solid #e9e9e9;
+  padding: 10px;
+}
+
+.publish-box .video-upload-box .el-form-item__content{
+  margin-left: 0px!important;
 }
 
 .publish-box .is-saved {
   float: right;
-  margin-top: 4px;
+  margin-top: 7px;
+  margin-right: 10px;
   font-family: PingFangSC-Regular;
   font-size: 14px;
   color: #999999;
@@ -1224,93 +1310,113 @@ export default {
 }
 
 .publish-toolbar .public-icon {
-  height: 30px;
-  width: 30px;
+  /*height: 30px;
+  width: 30px;*/
   background-repeat: no-repeat;
   background-position: 50% 50%;
   display: block;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "iconfont" !important;
+  font-size: 20px;
+  /*margin: 5px;*/
+  color: #999;
+  font-style: normal;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-h {
-  background-image: url(../../assets/images/toolbar-h-dis.png);
+  /*background-image: url(../../assets/images/toolbar-h-dis.png);*/
 }
 
 .toolbar-h {
-  background-image: url(../../assets/images/toolbar-h.png);
+  /*background-image: url(../../assets/images/toolbar-h.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
+.publish-toolbar .public-icon::before {
+  margin: 6px;
+}
+
+.publish-toolbar .tool-bar-disabled .public-icon {
+  color: #DDD;
+}
+
 .toolbar-b {
-  background-image: url(../../assets/images/toolbar-b.png);
+  /*background-image: url(../../assets/images/toolbar-b.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-b {
-  background-image: url(../../assets/images/toolbar-b-dis.png);
+  /*background-image: url(../../assets/images/toolbar-b-dis.png);*/
 }
 
 .toolbar-order {
-  background-image: url(../../assets/images/toolbar-order.png);
+  /*background-image: url(../../assets/images/toolbar-order.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-order {
-  background-image: url(../../assets/images/toolbar-order-dis.png);
+  /*background-image: url(../../assets/images/toolbar-order-dis.png);*/
 }
 
 .toolbar-unorder {
-  background-image: url(../../assets/images/toolbar-unorder.png);
+  /*background-image: url(../../assets/images/toolbar-unorder.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-unorder {
-  background-image: url(../../assets/images/toolbar-unorder-dis.png);
+  /*background-image: url(../../assets/images/toolbar-unorder-dis.png);*/
 }
 
 .toolbar-pic {
-  background-image: url(../../assets/images/toolbar-pic.png);
+  /*background-image: url(../../assets/images/toolbar-pic.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-pic {
-  background-image: url(../../assets/images/toolbar-pic-dis.png);
+  /*background-image: url(../../assets/images/toolbar-pic-dis.png);*/
 }
 
 .toolbar-video {
-  background-image: url(../../assets/images/toolbar-video.png);
+  /*background-image: url(../../assets/images/toolbar-video.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-video {
-  background-image: url(../../assets/images/toolbar-video-dis.png);
+  /*background-image: url(../../assets/images/toolbar-video-dis.png);*/
 }
 
 .toolbar-undo {
   transform: scaleX(-1);
-  background-image: url(../../assets/images/toolbar-back.png);
+  -ms-transform: scaleX(-1);
+  /*background-image: url(../../assets/images/toolbar-back.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-undo {
   transform: scaleX(-1);
-  background-image: url(../../assets/images/toolbar-back-dis.png);
+  -ms-transform: scaleX(-1);
+  /*background-image: url(../../assets/images/toolbar-back-dis.png);*/
 }
 
 .toolbar-redo {
-  background-image: url(../../assets/images/toolbar-back.png);
+  /*background-image: url(../../assets/images/toolbar-back.png);*/
   background-size: 18px 18px;
   display: inline-block;
 }
 
 .publish-toolbar .tool-bar-disabled .toolbar-redo {
-  background-image: url(../../assets/images/toolbar-back-dis.png);
+  /*background-image: url(../../assets/images/toolbar-back-dis.png);*/
+}
+
+.publish-toolbar .public-icon{
+  cursor: pointer;
 }
 
 .public-separator {
@@ -1370,7 +1476,7 @@ export default {
 }
 
 .video-progress-box {
-  width: 500px;
+  width: 90%;
 }
 
 .video-progress-box .el-progress-bar__inner {
@@ -1526,10 +1632,10 @@ export default {
   margin-bottom: 12px;
 }
 
-.video-feedback-mtop>i {
+.video-feedback-mtop > i {
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: 24px;
+  bottom: -16px;
   font-style: normal;
   padding: 1px 8px 1px 7px;
   font-size: 12px;
@@ -1724,17 +1830,19 @@ export default {
 }
 
 .cover-pic-choose {
-  background: #999 url("../../assets/images/icon-image-choose.png") no-repeat scroll center center;
+  background: url("../../assets/images/icon-image-choose.png") no-repeat scroll center center;
   height: 110px;
   line-height: 25px;
   position: absolute;
   top: 0;
   width: 110px;
   display: none;
+  background-color:rgba(0,0,0,0.5);
 }
 
 .selected .cover-pic-choose {
   display: block;
+  /*opacity: 0.5;*/
 }
 
 .public-article-img .pic-choose {

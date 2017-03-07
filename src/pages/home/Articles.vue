@@ -138,10 +138,10 @@ export default {
         color: ['#FF74B9', '#13CE66', '#FF9200', '#65ABEC', '#00D5AF', '#AE63FF'],
         animationDuration: 2000
       },
-      dateRange: '',
+      dateRange: [new Date(Date.now() - 3600 * 1000 * 24 * 1), new Date(Date.now() - 3600 * 1000 * 24 * 1)],
       forbiddenFuture: {
         disabledDate(time) {
-          return time.getTime() > Date.now();
+          return time.getTime() > Date.now() - 3600 * 1000 * 24 * 1;
         },
         shortcuts: [{
           text: '最近一周',
@@ -201,6 +201,7 @@ export default {
           this.$message.error('所选范围不能超过360天, 请重新选择！');
           return;
         }
+        console.log(this.dateRange);
         this.getRemoteAnalysisData();
       }
     },
@@ -241,9 +242,13 @@ export default {
 };
 </script>
 <style>
-.echarts {
+.news-wrap .echarts {
   height: 500px;
   width: 900px;
+}
+
+.news-wrap .el-input__inner {
+  display: inline-block;
 }
 
 .articles-board {

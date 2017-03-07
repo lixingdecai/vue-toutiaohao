@@ -13,7 +13,7 @@ minSize: 选区最小范围
 
 <template lang="html">
   <div>
-    <el-dialog title="裁剪图片" v-model="dialogCropVisible">
+    <el-dialog title="裁剪图片" :close-on-press-escape=false :close-on-click-modal=false  v-model="dialogCropVisible">
       <div class="crop-pic-content">
         <img :src="imgUrl" :id="bId" alt="Jcrop Image" />
       </div>
@@ -29,6 +29,7 @@ minSize: 选区最小范围
 import $ from 'jquery';
 import '../../static/Jcrop/js/jquery.Jcrop.min';
 import '../../static/Jcrop/css/jquery.Jcrop.min.css';
+import API from '../service';
 
 export default {
   name: 'crop',
@@ -99,7 +100,7 @@ export default {
             allowSelect: this.allowSelect,
             minSize: this.minSize,
             // 限制画布宽度
-            boxWidth: 890,
+            boxWidth: 635,
             bgFade: true,
             bgOpacity: 0.2,
             setSelect: this.setSelect
@@ -120,28 +121,76 @@ export default {
       return (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1);
     },
     guid() {
-      return (this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + this.s4() + this.s4()).replace(new RegExp('\\.', 'gm'), '-');
+      return (this.s4() + Date.now() + Math.floor(Math.random() * 999999)).replace(new RegExp('\\.', 'gm'), '');
     },
     cropImage() {
       // this.cropApi.destroy();
       this.dialogCropVisible = false;
-      this.$emit('getCropImg', this.cropUrl);
+      if (this.imgUrl.indexOf('adva_') !== -1 && this.imgUrl.indexOf('_adva') !== -1) {
+        const start = this.cropUrl.lastIndexOf('.');
+        const end = this.cropUrl.indexOf('?');
+        const ext = this.cropUrl.substring(start, end);
+        API.fetchUploadAvatar(this.cropUrl + '&adva_' + this.s4() + this.s4(), ext).then(json => {
+          if (json && json.code === 0) {
+            const data = json.data;
+            this.cropUrl = data.url + '?adva_' + this.s4() + this.s4();
+            this.$emit('getCropImg', this.cropUrl);
+          }
+        }).catch(error => {
+          this.$message.error('服务器裁剪异常，' + error.status);
+        });
+      } else {
+        const start = this.cropUrl.lastIndexOf('.');
+        const end = this.cropUrl.indexOf('?');
+        const ext = this.cropUrl.substring(start, end);
+        API.fetchUploadImage(this.cropUrl, ext).then(json => {
+          if (json && json.code === 0) {
+            const data = json.data;
+            this.cropUrl = data.url;
+            this.$emit('getCropImg', this.cropUrl);
+          }
+        }).catch(error => {
+          this.$message.error('服务器裁剪异常，' + error.status);
+        });
+      }
     },
     setCoords(c) {
       this.x = c.x;
       this.y = c.y;
       this.w = c.w;
       this.h = c.h;
-      this.cropUrl = this.imgUrl + '?imageMogr2/crop/!' + Math.round(this.w) + 'x' + Math.round(this.h) + 'a' + Math.round(this.x) + 'a' + Math.round(this.y);
+      let prefix = '?imageMogr2/crop/!';
+      // 为头像名称做特殊处理
+      if (this.imgUrl.indexOf('adva_' !== -1) && this.imgUrl.indexOf('_adva') !== -1) {
+        const newurl = this.imgUrl.replace(/(\?adva_)(.*)(_adva)/g, '');
+        // this.cropUrl = newurl + '?imageMogr2/crop/!' + Math.round(this.w) + 'x' + Math.round(this.h) + 'a' + Math.round(this.x) + 'a' + Math.round(this.y) + '&adva_' + this.s4() + this.s4();
+        if (newurl.indexOf('?') > 0) {
+          console.log(this.imgUrl.indexOf('?'), this.imgUrl);
+          prefix = '&imageMogr2/crop/!';
+        }
+        this.cropUrl = newurl + prefix + Math.round(this.w) + 'x' + Math.round(this.h) + 'a' + Math.round(this.x) + 'a' + Math.round(this.y);
+      } else {
+        if (this.imgUrl.indexOf('?') > 0) {
+          console.log(this.imgUrl.indexOf('?'), this.imgUrl);
+          prefix = '&imageMogr2/crop/!';
+        }
+        this.cropUrl = this.imgUrl + prefix + Math.round(this.w) + 'x' + Math.round(this.h) + 'a' + Math.round(this.x) + 'a' + Math.round(this.y);
+      }
     }
   }
 };
 </script>
 
 <style>
-  .crop-pic-content {
-    overflow-y: auto;
-    max-height: 500px;
-    min-height: 200px;
+.crop-pic-content {
+  max-width: 635px;
+  font-size: 0;
+  img {
+    max-width: 635px;
   }
+}
+
+.jcrop-keymgr {
+  display: none !important;
+}
 </style>

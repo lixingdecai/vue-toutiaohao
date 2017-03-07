@@ -6,15 +6,15 @@
     <div class="video-picker picker-dialog-content" v-if="publishVideoForm==false">
       <div>
         <i></i>
-        <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onProgress="onProgress" :filters="filters">
+        <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onProgress="onProgress" :filters="filters" :onError="onError">
           <el-button type="primary" @click="">点击选择视频</el-button>
         </upload>
-        <span>支持MP4格式的视频，大小不超过2G，较大的视频请压缩上传</span>
+        <span>支持MP4格式的视频，大小不超过1G，较大的视频请压缩上传</span>
       </div>
     </div>
     <div v-loading="loading" element-loading-text="保存中...">
       <el-form :model="publishModal" :rules="rules" ref="publishModal" label-position="left" label-width="120px" class="publish-pics-form" v-if="publishVideoForm==true">
-        <el-form-item class="upload-status" label="视频上传">
+        <el-form-item class="upload-status is-required" label="视频上传">
           <div id="video-uploaded" class="video-uploaded" v-if="uploadFile.percent == 100 || !uploadFlag">
             <div class="video-uploaded">
               <div class="video-feedback video-success">
@@ -24,9 +24,9 @@
                   <div class="oneline video-name">{{videoName}}</div>
                   <a class="video-preview" href="javascript:;" target="_blank"></a>
                   <div class="video-feedback-retry">
-                    <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onProgress="onProgress" :filters="filters">
+                   <!--  <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onProgress="onProgress" :filters="filters">
                       <span>重新上传</span>
-                    </upload>
+                    </upload> -->
                     <span @click="reUploadDialogVisible = true">重新上传</span>
                   </div>
                 </div>
@@ -57,7 +57,7 @@
           <el-input type="textarea" v-model="publishModal.video.remark" :autosize="{ minRows: 6, maxRows: 6}">
           </el-input>
         </el-form-item>
-        <el-form-item label="视频封面">
+        <el-form-item label="视频封面" class="is-required">
           <div class="edit-input">
             <img v-if="publishModal.video.thumb" class="video-poster" :src="publishModal.video.thumb">
             <button type="button" class="new-btn modify-poster" @click="settingVideoCover=true">
@@ -83,7 +83,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitVideo()">发表</el-button>
-          <el-button @click="saveDraft()">存草稿</el-button>
+          <el-button v-if="publishModal.status === 0 || publishModal.status === 8" @click="saveDraft()">存草稿</el-button>
           <!-- <el-button>客户端预览</el-button> -->
           <el-button @click="cancel">取消</el-button>
         </el-form-item>
@@ -93,7 +93,7 @@
       <span>是否确认重新上传视频</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="reUploadDialogVisible = false">取 消</el-button>
-        <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload"  :onProgress="onProgress" :filters="filters">
+        <upload :onSuccess="onVideoUploadSuccess" :beforeUpload="onVideoBeforeUpload" :onError="onError" :onProgress="onProgress" :filters="filters">
           <el-button type="primary" @click="reUploadDialogVisible = false">确 定</el-button>
         </upload>
       </span>
@@ -142,7 +142,7 @@ export default {
       },
       filters: {
         ext: 'mp4',
-        max_file_size: '1000mb'
+        max_file_size: '1024mb'
       },
       settingVideoCover: false,
       publish_category: [],
@@ -150,19 +150,13 @@ export default {
         type: 4,
         title: '',
         content: '',
-        thumbs: [{
-          src: ''
-        }, {
-          src: ''
-        }, {
-          src: ''
-        }],
+        thumbs: [],
         images: [],
         category_id: '',
         action: 'add',
         id: '',
         multi_video: [],
-        status: 1,
+        status: 0,
         video: {
           time: '',
           thumb: '',
@@ -204,9 +198,9 @@ export default {
     }
   },
   methods: {
-    cropImg() {
+    cropImg(url) {
       this.crop = !this.crop;
-      this.imgUrl = this.publishModal.video.thumb;
+      this.imgUrl = url;
     },
     init: function init() {
       console.log('publish video page init');
@@ -222,7 +216,6 @@ export default {
       this.dialogVideoVisible = true;
     },
     submitVideo: function submitVideo() {
-      this.publishModal.status = 1;
       this.$refs.publishModal.validate(valid => {
         if (valid) {
           if (!this.publishModal.video.thumb) {
@@ -233,6 +226,7 @@ export default {
             this.$message.error('请先上传视频！');
             return false;
           }
+          this.publishModal.status = 12;
           console.log(this.publishModal);
           this.loading = true;
           API.saveUpdateArticle(this.publishModal).then(result => {
@@ -257,7 +251,6 @@ export default {
       });
     },
     saveDraft: function saveDraft() {
-      this.publishModal.status = 8;
       this.$refs.publishModal.validate(valid => {
         if (valid) {
           if (!this.publishModal.video.thumb) {
@@ -268,6 +261,7 @@ export default {
             this.$message.error('请先上传视频！');
             return false;
           }
+          this.publishModal.status = 8;
           console.log(this.publishModal);
           this.loading = true;
           API.saveUpdateArticle(this.publishModal).then(result => {
@@ -292,9 +286,6 @@ export default {
       });
     },
     cancelUpload() {
-      if (this.up) {
-        this.up.stop();
-      }
       this.$confirm('确认取消上传', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -304,10 +295,13 @@ export default {
         this.publishModal.video.url = '';
         this.videoName = '';
         this.uploadFlag = false;
-        this.up.destroy();
+        this.up.removeFile(this.uploadFile);
       }).catch(() => {
-        this.up.start();
       });
+    },
+    onError(msg, up, err) {
+      console.log('发表视频-视频上传失败：' + err);
+      this.uploadFlag = false;
     },
     cancel() {
       this.$confirm('确认取消本次的发布，取消后编辑的内容将无法找回', '提示', {
@@ -338,9 +332,8 @@ export default {
     onVideoCoverSuccess(url, file) {
       this.loading2 = false;
       console.log(file);
-      this.publishModal.video.thumb = url;
       this.settingVideoCover = false;
-      this.cropImg();
+      this.cropImg(url);
       console.log('upload video corver success');
     },
     onProgress(up, file) {

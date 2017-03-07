@@ -27,6 +27,7 @@ import '../../static/pupload/crypto1/hmac/hmac';
 import '../../static/pupload/crypto1/sha1/sha1';
 import plupload from '../../static/pupload/plupload-2.1.2/js/plupload.full.min';
 // import API from '../service';
+import Config from '../../config';
 
 export default {
   name: 'upload',
@@ -40,7 +41,7 @@ export default {
       token: '',
       host: '',
       userID: '',
-      gDirname: 'www.mp.meiyou.com/',
+      gDirname: '',
       gObjectName: '',
       policyText: '',
       policyBase64: '',
@@ -50,6 +51,10 @@ export default {
     };
   },
   props: {
+    isIdCard: {
+      type: Boolean,
+      default: false
+    },
     isAvatar: {
       type: Boolean,
       default: false
@@ -150,8 +155,11 @@ export default {
       this.gObjectName += `${filename}`;
       const suffix = this.getSuffix(filename);
       if (this.isAvatar) {
-        this.gObjectName = this.gDirname + 'avatar_' + this.userID + '_' + this.guid() + suffix;
+        this.gObjectName = 'avatar_' + this.userID + suffix;
       } else {
+        if (this.isIdCard) {
+          this.gDirname = this.gDirname + 'idcard/';
+        }
         this.gObjectName = this.gDirname + this.guid() + suffix;
       }
       return '';
@@ -173,7 +181,7 @@ export default {
         // 让服务端返回200,不然，默认会返回204
         success_action_status: '200',
         signature: this.signature,
-        // 'x-oss-security-token': this.token
+        'x-oss-security-token': this.token
       };
       up.setOption({
         multipart_params: newMultipartParams
@@ -187,9 +195,9 @@ export default {
         browse_button: that.bId + '',
         // multi_selection: false,
         // container: document.getElementById('container'),
-        flash_swf_url: '../../static/js/lib/pupload/plupload-2.1.2/js/Moxie.swf',
-        silverlight_xap_url: '../../static/js/lib/pupload/plupload-2.1.2/js/Moxie.xap',
-        url: that.host,
+        flash_swf_url: Config.cdnPath + 'pupload/plupload-2.1.2/js/Moxie.swf',
+        silverlight_xap_url: Config.cdnPath + 'pupload/plupload-2.1.2/js/Moxie.xap',
+        url: 'https://pic-meiyou.oss-cn-hangzhou.aliyuncs.com/',
         multi_selection: true,
         filters: {
           mime_types: [{
@@ -200,6 +208,9 @@ export default {
           max_file_size: this.filters.max_file_size.toLowerCase(),
           // 不允许队列中存在重复文件
           // prevent_duplicates: true
+        },
+        resize: {
+          quality: 80
         },
         init: {
           PostInit: () => {
@@ -253,7 +264,11 @@ export default {
                 if (that.fileId) {
                   file.id = that.fileId;
                 }
-                that.onSuccess(fileUrl, up, file, info);
+                if (this.isAvatar) {
+                  that.onSuccess(fileUrl + '?adva_' + this.s4() + Date.now() + '_adva', up, file, info);
+                } else {
+                  that.onSuccess(fileUrl, up, file, info);
+                }
               }
             } else {
               const message = info.response;
@@ -264,11 +279,18 @@ export default {
             }
           },
           Error: (up, err) => {
-            if (err.message === 'File size error.') {
+            console.log('上传失败：', err, that.onError, up);
+            if (err.code === -600) {
               that.$message.error('文件大小超出限制，限制大小为' + that.filters.max_file_size);
+            } else if (err.status === 403) {
+              console.log('tocken过期，请刷新页面后再上传文件!');
+              that.$message.error('页面失效，请刷新页面后重新上传文件!');
+            } else {
+              console.log('文件上传失败，请刷新页面后重新上传文件！');
+              that.$message.error('文件上传失败，请刷新页面后重新上传文件！');
             }
             if (that.onError) {
-              that.onError(err.message);
+              that.onError(err.message, up, err);
             }
             // document.getElementById('console').appendChild(document.createTextNode('\nError xml:' + err.response));
           }

@@ -38,6 +38,12 @@ body {
   padding: 0 10px !important;
 }
 
+.view {
+  word-break: break-all;
+}
+
+#edui1_imagescale{display:none !important;}
+
 .bar {
   background: #f3f3f3 none repeat scroll 0 0;
   height: 30px;
@@ -159,6 +165,10 @@ blockquote {
   line-height: 1.4;
   margin: 10px 0;
   padding: 12px 8px;
+}
+
+.main-content {
+  margin-top: -24px;
 }
 
 .profile_v {
@@ -294,3 +304,4 @@ body pre, body code {
 .mu-ue-image-tips:focus:before {
   content: none;
 }
+

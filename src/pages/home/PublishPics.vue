@@ -3,14 +3,15 @@
   <div class="image-picker picker-dialog-content" v-if="publishVideoForm==false">
     <div>
       <i></i>
-      <upload :onSuccess="onSuccess" :beforeUpload="beforeUpload">
+      <upload :onSuccess="onSuccess" :beforeUpload="beforeUpload" :filters="imgFilters">
         <el-button type="primary">上传图集</el-button>
       </upload>
       <div class="publish-pics-attention">
         <ul>
           <li>图集功能使用需知：</li>
-          <li>1、图集支持绝大部分图片格式，大小不超过5M,最长边不超过1000像素；</li>
-          <li>2、禁止发布涉及政治敏感，黄色暴力，血腥恐怖等图集；</li>
+          <li>1、图集支持PNG、JPEG、JPG图片格式，大小不超过5M, 最长边不超过10000像素；</li>
+          <li>2、禁止发布涉及政治敏感、黄色暴力、血腥恐怖等图集；</li>
+          <li>3、禁止使用图集模式发表文字类、统计图类、gif图、画质粗糙的视频截图，该类文章将被退回且占用当天的一篇发文次数，建议使用文章模式发表；</li>
         </ul>
       </div>
     </div>
@@ -21,7 +22,7 @@
         <draggable :list="publishModal.images" :options="{'handle':'.publish-pics-sort','connectWith': '.publish-pics-list'}">
           <div id="sortable" class="publish-pics-rows" v-for="(item, index) in publishModal.images">
             <div class="publish-pics-img" v-loading="item.loading">
-              <div v-show="!item.src" class="publish-pics-uploading">{{item.message}}</div>
+              <div v-show="!item.src" class="publish-pics-uploading">{{item.message ? item.message : '上传中...'}}</div>
               <img v-show="item.src" :src="item.src" />
             </div>
             <div class="publish-pics-desc">
@@ -29,7 +30,7 @@
             </div>
             <div class="publish-pics-opers">
               <el-tooltip content="重新上传" placement="top" effect="light">
-                <upload :onSuccess="onSuccess" :beforeUpload="beforeReUpload" :fileId="item.id">
+                <upload :onSuccess="onSuccess" :beforeUpload="beforeReUpload" :fileId="item.id" :filters="imgFilters">
                   <div class="publish-pics-edit"></div>
                 </upload>
               </el-tooltip>
@@ -45,7 +46,7 @@
       </div>
       <div class="publish-pics-add-wrap">
         <div class="publish-pics-add">
-          <upload :onSuccess="onSuccess" :beforeUpload="beforeUpload">
+          <upload :onSuccess="onSuccess" :beforeUpload="beforeUpload" :filters="imgFilters">
             <span>
               <i class="el-icon-plus"></i>
                 添加图片
@@ -65,6 +66,12 @@
         </div>
         <span class="title-des">5-30个字</span>
       </el-form-item>
+      <el-form-item label="封面" class="is-required">
+        <el-radio-group v-model="coverStyle">
+          <el-radio label="" :label="0">自动
+          <el-tooltip content="系统默认选择正文第一张图片作为封面" placement="top" effect="light">(?)</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="分类" prop="category_id">
         <el-select v-model="publishModal.category_id">
           <el-option v-for="item in publish_category" :label="item.tag_name" :value="item.id + ''"></el-option>
@@ -72,7 +79,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitPics()">发表</el-button>
-        <el-button @click="saveDraft()">存草稿</el-button>
+        <el-button v-if="publishModal.status === 0 || publishModal.status === 8" @click="saveDraft()">存草稿</el-button>
         <!-- <el-button>客户端预览</el-button> -->
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
@@ -100,6 +107,11 @@ export default {
       loading: false,
       publishVideoForm: false,
       pics: [],
+      coverStyle: 0,
+      imgFilters: {
+        ext: 'jpg,jpeg,png',
+        max_file_size: '5mb'
+      },
       publishModal: {
         type: 3,
         title: '',
@@ -110,7 +122,7 @@ export default {
         action: 'add',
         id: '',
         video: {},
-        status: 1,
+        status: 0,
         multi_video: [],
       },
       uploadImageList: [],
@@ -139,6 +151,10 @@ export default {
     if (this.id) {
       API.fetchArticleDetail(this.id).then(result => {
         this.publishModal = result.data;
+        const images = this.publishModal.images;
+        for (let i = 0; i < images.length; i++) {
+          images[i].id = 'static' + i;
+        }
         this.publishModal.action = 'update';
         this.publishModal.category_id = this.publishModal.category_id + '';
         this.publishVideoForm = true;
@@ -155,9 +171,13 @@ export default {
       });
     },
     submitPics: function submitPics() {
-      this.publishModal.status = 1;
       this.$refs.publishModal.validate(valid => {
         if (valid) {
+          if (this.publishModal.images.length < 4) {
+            this.$message.error('请上传至少四张图片！');
+            return false;
+          }
+          this.publishModal.status = 12;
           this.loading = true;
           API.saveUpdateArticle(this.publishModal).then(result => {
             console.log('发表成功' + result);
@@ -175,13 +195,16 @@ export default {
           console.log('error submit!!');
           return false;
         }
-        return false;
+        return true;
       });
     },
     saveDraft: function saveDraft() {
-      this.publishModal.status = 8;
       this.$refs.publishModal.validate(valid => {
         if (valid) {
+          // if (this.publishModal.images.length < 3) {
+          //   return this.$message.error('请上传至少三张图片！');
+          // }
+          this.publishModal.status = 8;
           this.loading = true;
           API.saveUpdateArticle(this.publishModal).then(result => {
             console.log('保存草稿成功' + result);
@@ -397,19 +420,21 @@ export default {
 }
 
 .publish-pics-attention li {
-  line-height: 30px;
-  height: 30px;
+  float:left;
+  margin: 7px 0;
+  width: 550px
 }
 
 .publish-pics-attention li:last-child {
-  line-height: 40px;
-  height: 40px;
+ /* line-height: 40px;
+  height: 40px;*/
 }
 
 .publish-pics-rows {
   height: 110px;
   overflow: hidden;
   margin-bottom: 15px;
+  background-color: #fff;
 }
 
 .publish-pics-img {

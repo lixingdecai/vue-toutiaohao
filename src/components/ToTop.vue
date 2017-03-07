@@ -1,7 +1,7 @@
 <template lang="html">
   <transition name="fade">
     <div id="back-to-top" v-show="show" @click="backToTop">
-      <i :class="type"></i>
+      <i class="icon-totop"></i>
     </div>
   </transition>
 </template>
@@ -11,7 +11,6 @@ export default {
   name: 'to-top',
   data() {
     return {
-      type: 'el-icon-arrow-up',
       show: false
     }
   },
@@ -49,13 +48,21 @@ export default {
 <style lang="scss" scoped>
 #back-to-top {
   position: fixed;
-  right: 30px;
-  bottom: 30px;
-  padding: 10px;
-  background-color: #20a0ff;
-  color: #fff;
+  right: 50px;
+  bottom: 50px;
+  font-size: 0;
+  overflow: hidden;
   cursor: pointer;
-  border-radius: 50%;
+  z-index: 99999;
+}
+
+.icon-totop {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  background-image: url('../assets/images/totop.png');
+  background-size: 100%;
+  text-indent: -999em;
 }
 
 .fade-enter-active, .fade-leave-active {
