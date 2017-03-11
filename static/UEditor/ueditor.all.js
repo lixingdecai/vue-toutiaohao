@@ -8042,6 +8042,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
 UE.Editor.defaultOptions = function(editor){
 
     var _url = editor.options.UEDITOR_HOME_URL;
+    console.log('---------------------', _url);
     return {
         isShow: true,
         initialContent: '',

@@ -197,7 +197,7 @@ export default {
         // container: document.getElementById('container'),
         flash_swf_url: Config.cdnPath + 'pupload/plupload-2.1.2/js/Moxie.swf',
         silverlight_xap_url: Config.cdnPath + 'pupload/plupload-2.1.2/js/Moxie.xap',
-        url: 'https://pic-meiyou.oss-cn-hangzhou.aliyuncs.com/',
+        url: that.host,
         multi_selection: true,
         filters: {
           mime_types: [{
