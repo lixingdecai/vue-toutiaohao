@@ -1,28 +1,6 @@
 import $ from 'jquery';
 // import _ from '../util/tools';
 
-const mpHost = process.env.DEBUG_MODE ? '' : '/';
-
-const API_URL = {
-  category: `${mpHost}category`,
-  news: `${mpHost}news`,
-  newstemp: `${mpHost}newstemp`,
-  newsdetail: `${mpHost}newsdetail`,
-  newsAction: `${mpHost}newsaction`,
-  userApply: `${mpHost}userapply`,
-  setting: `${mpHost}setting`,
-  forgot: `${mpHost}forgetpassword`,
-  exit: `${mpHost}exit`,
-  userInfo: `${mpHost}user`,
-  unread: `${mpHost}unread`,
-  comment: `${mpHost}comment`,
-  friendship: `${mpHost}friendship`,
-  announce: `${mpHost}announce`,
-  analysis: `${mpHost}analysis`,
-  notify: `${mpHost}notify`,
-  operationlog: `${mpHost}operationlog`
-};
-
 $.ajaxSetup({
   dataType: 'json',
   cache: false
@@ -324,16 +302,8 @@ const fetchAccountInfo = () => {
  * 设置账号信息
  * @return {promise}     返回json信息
  */
-const setAccountInfo = obj => new Promise((resolve, reject) => {
-  $.ajax({
-    url: API_URL.setting,
-    type: 'POST',
-    data: obj
-  }).done(res => {
-    resolve(res);
-  }).fail(err => {
-    reject(err);
-  });
+const setAccountInfo = new Promise(resolve => {
+  resolve();
 });
 
 /**
@@ -341,15 +311,8 @@ const setAccountInfo = obj => new Promise((resolve, reject) => {
  * @param  {int} step    1代表第一步提交信息,2下发领域
  * @return {promise}     返回json信息
  */
-const fetchApplyInfo = step => new Promise((resolve, reject) => {
-  $.ajax({
-    url: `${API_URL.userApply}?step=${step}`,
-    type: 'GET'
-  }).done(res => {
-    resolve(res);
-  }).fail(err => {
-    reject(err);
-  });
+const fetchApplyInfo = new Promise(resolve => {
+  resolve();
 });
 
 /**
@@ -418,15 +381,8 @@ const helloJsonp = url => $.ajax({
  * 获取用户信息
  * @return {promise}   返回json信息
  */
-const fetchUserInfo = () => new Promise((resolve, reject) => {
-  $.ajax({
-    url: API_URL.userInfo,
-    type: 'GET'
-  }).done(res => {
-    resolve(res);
-  }).fail(err => {
-    reject(err);
-  });
+const fetchUserInfo = new Promise(resolve => {
+  resolve();
 });
 
 /**
@@ -446,18 +402,8 @@ const fetchUnreadInfo = () => {
  * @param  {string}  type  system:系统, comment:评论 follow:关注 repeat:转发 favour:收藏
  * @return {promise}       返回json信息
  */
-const resetUnreadInfo = type => new Promise((resolve, reject) => {
-  $.ajax({
-    url: API_URL.unread,
-    type: 'POST',
-    data: {
-      type: type
-    }
-  }).done(res => {
-    resolve(res);
-  }).fail(err => {
-    reject(err);
-  });
+const resetUnreadInfo = new Promise(resolve => {
+  resolve();
 });
 
 /**
