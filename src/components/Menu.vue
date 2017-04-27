@@ -18,7 +18,6 @@
       <el-menu-item-group class="menu-line">
         <template slot="title"><i class="el-menu-icon el-icon-safe"></i>账号管理</template>
           <el-menu-item index="information" :route="{ name: 'information' }">账号信息</el-menu-item>
-          <a href="javascript:;" id="menuAccount" class="sso-menu" target="_blank">账号设置</a>
           <a href="javascript:;" id="menuPassword" class="sso-menu" target="_blank">密码修改</a>
           <el-menu-item index="logs" :route="{ name: 'logs' }">操作日志</el-menu-item>
       </el-menu-item-group>
@@ -31,7 +30,7 @@ import {
   mapGetters
 } from 'vuex';
 
-import _ from '../util/tools';
+// import _ from '../util/tools';
 
 export default {
   name: 'menu',
@@ -45,10 +44,6 @@ export default {
   }),
   mounted() {
     console.log('menu mounted.');
-    const accountUrl = `${_.getSSOAddr()}home`;
-    const passUrl = `${_.getSSOAddr()}home/password?mobile=${this.user.phone}`;
-    document.getElementById('menuAccount').setAttribute('href', accountUrl);
-    document.getElementById('menuPassword').setAttribute('href', passUrl);
   }
 };
 </script>

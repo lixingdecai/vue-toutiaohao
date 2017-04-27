@@ -258,9 +258,6 @@ export default {
           this.$message.error(json.message);
         }
         this.loading = false;
-      }).catch(error => {
-        this.$message.error('接口异常，' + error.status);
-        this.loading = false;
       });
     }
   }

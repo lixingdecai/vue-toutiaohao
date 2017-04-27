@@ -132,20 +132,20 @@ export default {
       this.status = status;
       this.pageList(this.type, this.status, this.currentPage);
     },
-    pageList(type, status, page) {
+    pageList() {
       this.loading = true;
-      API.fetchArticleList(type, status, page).then(json => {
+      API.fetchArticleList().then(json => {
+        console.log(json.code);
         console.log('ArticleList json: ', JSON.stringify(json, null, 2));
         if (json.code === 0) {
+          console.log(json.data);
           const data = json.data;
           this.articleList = data.data;
           this.pageInfo = data.page_info || {};
+          console.log(2);
         } else {
           this.$message.error(json.message);
         }
-        this.loading = false;
-      }).catch(error => {
-        this.$message.error('接口异常，' + error.status);
         this.loading = false;
       });
     },

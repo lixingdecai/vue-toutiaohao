@@ -14,7 +14,7 @@ import '../theme/index.css';
 
 import router from './router';
 import store from './store';
-// import filters from './filters';
+import filters from './filters';
 import App from './App';
 // import API from './service';
 
@@ -26,9 +26,9 @@ Vue.component('chart', ECharts);
 Vue.config.devtools = process.env.DEBUG_MODE;
 
 // 注册全局自定义过滤器
-// Object.keys(filters).forEach(v => {
-//   Vue.filter(v, filters[v]);
-// });
+Object.keys(filters).forEach(v => {
+  Vue.filter(v, filters[v]);
+});
 
 // 注册一个全局自定义指令 v-focus
 Vue.directive('focus', {
