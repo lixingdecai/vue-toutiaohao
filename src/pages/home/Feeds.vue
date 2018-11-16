@@ -106,13 +106,13 @@ export default {
       tableData: [{
         name: '王小虎',
         platform: '美柚',
-        link: 'https://www.meiyou.com',
+        link: 'https://www.my.com',
         status: '待审核',
         id: 1,
       }, {
         name: '王小虎',
         platform: '美柚',
-        link: 'https://www.meiyou.com',
+        link: 'https://www.my.com',
         status: '待审核',
         id: 2,
       }]

@@ -2,9 +2,9 @@
 var path = require('path')
 
 const cdnPath = '//olbge0v0r.bkt.clouddn.com/vue.toutiaohao.com/';
-// const mpTestApi = 'https://test-mp.meiyou.com/';
-// const mpApi = 'https://mp.meiyou.com/';
-// const ssoTestApi = 'https://test-sso.meiyou.com/sso/';
+// const mpTestApi = 'https://test-mp.my.com/';
+// const mpApi = 'https://mp.my.com/';
+// const ssoTestApi = 'https://test-sso.my.com/sso/';
 
 module.exports = {
   build: {

@@ -97,7 +97,7 @@ export default {
       const len = value.trim().replace(/[^\x00-\xff]/g, 'aa').length;
       if (value === '') {
         callback(new Error('请填写账号名称'));
-      } else if (!_.isMeiyouName(value)) {
+      } else if (!_.ismyName(value)) {
         callback(new Error('请勿使用包含特殊符号的名称'));
       } else if (len < 4 || len > 20) {
         callback(new Error('账号名称为2-10个字或者4-20个字符'));

@@ -234,13 +234,13 @@ exports.statusWarning = (status, msg, self, type) => {
  */
 const getSSOAddr = () => {
   const host = window.location.host;
-  let ssoApi = 'https://test-sso.meiyou.com/sso/';
+  let ssoApi = 'https://test-sso.my.com/sso/';
   if (host.indexOf('test-') > -1 || host.indexOf('pc-') > -1 || host.indexOf('localhost') > -1 || host.indexOf('127.0.0.1') > -1) {
-    ssoApi = 'https://test-sso.meiyou.com/sso/';
+    ssoApi = 'https://test-sso.my.com/sso/';
   } else if (host.indexOf('yf-') > -1) {
-    ssoApi = 'https://yf-sso.meiyou.com/sso/';
+    ssoApi = 'https://yf-sso.my.com/sso/';
   } else {
-    ssoApi = 'https://sso.meiyou.com/sso/';
+    ssoApi = 'https://sso.my.com/sso/';
   }
   return ssoApi;
 };
@@ -251,15 +251,15 @@ const getSSOAddr = () => {
  */
 const getMPAddr = () => {
   const host = window.location.host;
-  let mpApi = 'https://test-mp.meiyou.com';
+  let mpApi = 'https://test-mp.my.com';
   if (host.indexOf('pc-') > -1 || host.indexOf('localhost') > -1 || host.indexOf('127.0.0.1') > -1) {
-    mpApi = 'http://pc-mp.meiyou.com:8888/';
+    mpApi = 'http://pc-mp.my.com:8888/';
   } else if (host.indexOf('test-') > -1) {
-    mpApi = 'https://test-mp.meiyou.com';
+    mpApi = 'https://test-mp.my.com';
   } else if (host.indexOf('yf-') > -1) {
-    mpApi = 'https://yf-mp.meiyou.com';
+    mpApi = 'https://yf-mp.my.com';
   } else {
-    mpApi = 'https://mp.meiyou.com';
+    mpApi = 'https://mp.my.com';
   }
   return mpApi;
 };
@@ -394,7 +394,7 @@ exports.isChineseName = value => /^[\u4E00-\u9FA5]{2,15}$/.test(value.trim());
  * @param  {[type]} value [description]
  * @return {[type]}       [description]
  */
-exports.isMeiyouName = value => /^[\u4e00-\u9fa5a-zA-Z\d_]*$/gi.test(value.trim());
+exports.ismyName = value => /^[\u4e00-\u9fa5a-zA-Z\d_]*$/gi.test(value.trim());
 
 /**
  * 返回默认头像
@@ -420,39 +420,39 @@ exports.https = value => {
 
 const setUserPhone = exports.setUserPhone = user => {
   if (user && Object.prototype.hasOwnProperty.call(user, 'phone')) {
-    Cookie.set('meiyou_mp_phone', user.phone, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_phone', user.phone, { expires: 7, domain: '.my.com' });
   }
 };
 
 const setUserStatus = exports.setUserStatus = user => {
   if (user && Object.prototype.hasOwnProperty.call(user, 'status')) {
-    Cookie.set('meiyou_mp_status', user.status, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_status', user.status, { expires: 7, domain: '.my.com' });
   } else {
-    Cookie.set('meiyou_mp_status', user, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_status', user, { expires: 7, domain: '.my.com' });
   }
 };
 
 const setUserType = exports.setUserType = user => {
   if (user && Object.prototype.hasOwnProperty.call(user, 'type')) {
-    Cookie.set('meiyou_mp_type', user.type, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_type', user.type, { expires: 7, domain: '.my.com' });
   }
 };
 
 const setUserVerified = exports.setUserVerified = user => {
   if (user && Object.prototype.hasOwnProperty.call(user, 'phone_verified')) {
-    Cookie.set('meiyou_mp_verified', user.phone_verified, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_verified', user.phone_verified, { expires: 7, domain: '.my.com' });
   }
 };
 
 const setUserName = exports.setUserName = user => {
   if (user && Object.prototype.hasOwnProperty.call(user, 'name')) {
-    Cookie.set('meiyou_mp_name', user.name, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_name', user.name, { expires: 7, domain: '.my.com' });
   }
 };
 
 const setUserAvatar = exports.setUserAvatar = user => {
   if (user && Object.prototype.hasOwnProperty.call(user, 'avatar')) {
-    Cookie.set('meiyou_mp_avatar', user.avatar, { expires: 7, domain: '.meiyou.com' });
+    Cookie.set('my_mp_avatar', user.avatar, { expires: 7, domain: '.my.com' });
   }
 };
 
@@ -473,7 +473,7 @@ const hidMobile = value => {
 };
 
 exports.getUserAvatar = () => {
-  const mpAvatar = Cookie.get('meiyou_mp_avatar');
+  const mpAvatar = Cookie.get('my_mp_avatar');
   if (mpAvatar) {
     return mpAvatar + '?time=' + Date.now();
   }
@@ -481,8 +481,8 @@ exports.getUserAvatar = () => {
 };
 
 exports.getUserName = () => {
-  const mpName = Cookie.get('meiyou_mp_name');
-  const mpPhone = Cookie.get('meiyou_mp_phone');
+  const mpName = Cookie.get('my_mp_name');
+  const mpPhone = Cookie.get('my_mp_phone');
   if (mpName) {
     return mpName;
   } else if (mpPhone && isMobile(mpPhone)) {
@@ -491,13 +491,13 @@ exports.getUserName = () => {
   return '';
 };
 
-exports.getUserVerified = () => +Cookie.get('meiyou_mp_verified') || 0;
+exports.getUserVerified = () => +Cookie.get('my_mp_verified') || 0;
 
-exports.getUserType = () => +Cookie.get('meiyou_mp_type') || 1;
+exports.getUserType = () => +Cookie.get('my_mp_type') || 1;
 
-exports.getUserStatus = () => +Cookie.get('meiyou_mp_status') || 0;
+exports.getUserStatus = () => +Cookie.get('my_mp_status') || 0;
 
-exports.getUserPhone = () => Cookie.get('meiyou_mp_phone') || '';
+exports.getUserPhone = () => Cookie.get('my_mp_phone') || '';
 
 exports.getAvatar = getAvatar;
 exports.getSSOAddr = getSSOAddr;
