@@ -270,13 +270,13 @@ const getMPAddr = () => {
  */
 exports.getNewsAddr = () => {
   const host = window.location.host;
-  let newsApi = 'https://test-news-node.seeyouyima.com';
+  let newsApi = 'https://test-news-node.my.com';
   if (host.indexOf('test-') > -1 || host.indexOf('pc-') > -1 || host.indexOf('localhost') > -1 || host.indexOf('127.0.0.1') > -1) {
-    newsApi = 'https://test-news-node.seeyouyima.com';
+    newsApi = 'https://test-news-node.my.com';
   } else if (host.indexOf('yf-') > -1) {
-    newsApi = 'https://yf-news-node.seeyouyima.com';
+    newsApi = 'https://yf-news-node.my.com';
   } else {
-    newsApi = 'https://news-node.seeyouyima.com';
+    newsApi = 'https://news-node.my.com';
   }
   return newsApi;
 };

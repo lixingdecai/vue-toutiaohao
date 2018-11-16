@@ -227,7 +227,7 @@ export default {
     },
     // addPic() {
     //   const o = {};
-    //   o.src = '//sc.seeyouyima.com/forum/data/5840d5e5b16ad_549_418.jpg?imageView2/2/w/750/h/500';
+    //   o.src = '//sc.my.com/forum/data/5840d5e5b16ad_549_418.jpg?imageView2/2/w/750/h/500';
     //   o.remark = 'aaaaaaa' + Math.random();
     //   this.publishModal.images.push(o);
     // },
